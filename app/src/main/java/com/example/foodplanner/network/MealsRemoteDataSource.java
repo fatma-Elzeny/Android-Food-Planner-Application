@@ -1,6 +1,7 @@
 package com.example.foodplanner.network;
 
 public interface MealsRemoteDataSource {
+
     void getMealOfTheDay(NetworkCallback<Object> callback);
 
     void searchMealsByName(String name, NetworkCallback<Object> callback);
