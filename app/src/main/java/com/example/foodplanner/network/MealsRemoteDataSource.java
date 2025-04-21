@@ -17,4 +17,5 @@ public interface MealsRemoteDataSource {
     void getAllCategories(NetworkCallback<Object> callback);
 
     void getAllCountries(NetworkCallback<Object> callback);
+
 }

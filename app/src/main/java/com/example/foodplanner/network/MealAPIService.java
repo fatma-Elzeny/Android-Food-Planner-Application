@@ -22,4 +22,10 @@ public interface MealAPIService {
 
     @GET("lookup.php")
     Call<MealResponse> getMealDetails(@Query("i") String mealId);
+
+    @GET("list.php?c=list")
+    Call<MealResponse> getAllCategories();
+
+    @GET("list.php?a=list")
+    Call<MealResponse> getAllCountries();
 }
