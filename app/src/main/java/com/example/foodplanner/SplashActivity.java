@@ -12,7 +12,7 @@ import android.os.Handler;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static final int SPLASH_TIME = 3000; // 3 seconds
+    private static final int SPLASH_TIME = 5000; // 5 seconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +20,8 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         new Handler().postDelayed(() -> {
-            // Navigate to Main or Login screen
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            // Navigate to Login screen
+            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }, SPLASH_TIME);
