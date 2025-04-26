@@ -3,8 +3,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 
@@ -34,8 +37,8 @@ import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText editEmail, editPassword;
-    private Button btnLogin, btnSignUp, btnGuest;
+    //private EditText editEmail, editPassword;
+    private Button btnSignUp, btnGuest;
 
     private static final int RC_GOOGLE_SIGN_IN = 1001;
 
@@ -45,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
 
+    private TextView btnLogin ;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -56,8 +60,11 @@ public class LoginActivity extends AppCompatActivity {
       //  editPassword = findViewById(R.id.edit_password);
         btnLogin = findViewById(R.id.btn_login);
         btnSignUp = findViewById(R.id.btn_signup);
-       // btnGuest = findViewById(R.id.btn_guest);
+        btnGuest = findViewById(R.id.btn_guest);
         googleBtn = findViewById(R.id.btn_google);
+       // LoginButton facebookBtn = findViewById(R.id.btn_facebook);
+
+        setGoogleButtonText(googleBtn, "Continue with Google");
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -88,8 +95,8 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         // Facebook Login setup
-        LoginButton facebookBtn = findViewById(R.id.btn_facebook);
-        facebookBtn.setPermissions("email", "public_profile");
+
+      /*  facebookBtn.setPermissions("email", "public_profile");
 
         CallbackManager callbackManager = CallbackManager.Factory.create();
         facebookBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -110,27 +117,37 @@ public class LoginActivity extends AppCompatActivity {
             public void onError(FacebookException error) {
                 toast("Facebook error: " + error.getMessage());
             }
-        });
+        });*/
 
 
     }
+    private void setGoogleButtonText(SignInButton signInButton, String buttonText) {
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+
+            if (v instanceof TextView) {
+                ((TextView) v).setText(buttonText);
+                return;
+            }
+        }
+    }
 
     private void loginUser() {
-        String email = editEmail.getText().toString();
-        String password = editPassword.getText().toString();
+        //String email = editEmail.getText().toString();
+       // String password = editPassword.getText().toString();
 
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Email and Password required", Toast.LENGTH_SHORT).show();
-            return;
-        }
+     //  if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+    //   Toast.makeText(this, "Email and Password required", Toast.LENGTH_SHORT).show();
+        //    return;
+        //}
 
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener(authResult -> {
+      //  firebaseAuth.signInWithEmailAndPassword(email, password)
+             //   .addOnSuccessListener(authResult -> {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(LoginActivity.this, "Login Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                   // finish();
+                //})
+             //   .addOnFailureListener(e ->
+                    //    Toast.makeText(LoginActivity.this, "Login Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
     private void gotoMain() {
         startActivity(new Intent(this, MainActivity.class));
