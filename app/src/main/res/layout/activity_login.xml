@@ -1,46 +1,116 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="24dp"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:background="@color/white">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/edit_email"
+    <!-- Background Image -->
+    <ImageView
+        android:id="@+id/background_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/backgroud" />
 
-    <EditText
-        android:id="@+id/edit_password"
+    <!-- Gradient overlay -->
+    <View
+        android:id="@+id/gradient_overlay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        android:layout_height="match_parent"
+        android:alpha="0.7"
+        android:background="@drawable/gradient_overlay" />
 
-    <Button
-        android:id="@+id/btn_login"
+    <!-- Main content -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login" />
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:padding="32dp">
 
-    <Button
-        android:id="@+id/btn_signup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sign Up" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/btn_guest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Continue as Guest" />
-</LinearLayout>
+            <!-- Sign up with Email -->
 
+            <!-- Divider Text -->
 
+            <!-- Google Sign-In -->
 
+            <!-- Facebook Sign-In -->
 
+            <!-- Already have account -->
 
 
+            <Button
+                android:id="@+id/btn_signup"
+                android:layout_width="343dp"
+                android:layout_height="59dp"
+                android:backgroundTint="@color/white"
+                android:text="Sign up with email"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="370dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="or use social sign up"
+                android:textColor="@android:color/white"
+                tools:layout_editor_absoluteX="109dp"
+                tools:layout_editor_absoluteY="449dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_google"
+                android:layout_width="343dp"
+                android:layout_height="59dp"
+                android:backgroundTint="@android:color/white"
+                android:cornerRadius="30dp"
+                android:gravity="center_vertical"
+                android:icon="@drawable/ic_google_logo"
+                android:iconGravity="textStart"
+                android:iconPadding="8dp"
+                android:text="Continue with Google"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="481dp" />
+
+            <Button
+                android:id="@+id/btn_facebook"
+                android:layout_width="343dp"
+                android:layout_height="59dp"
+                android:backgroundTint="@color/white"
+                android:drawableLeft="@drawable/ic_facebook"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:text="Continue with Facebook"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="540dp" />
+
+            <TextView
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="Already have an account? Log In"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_facebook"
+                tools:layout_editor_absoluteX="70dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

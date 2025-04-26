@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Give access ONLY to app's private storage -->
+    <external-files-path
+        name="meal_images"
+        path="Pictures/" />
+
+    <external-cache-path
+        name="cache_files"
+        path="." />
+
+</paths>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FoodPlanner</string>
+    <string name="default_web_client_id">433653932448-m9h594749qj963rld38vv5mhseimj28f.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">3499500953518304</string>
 </resources>

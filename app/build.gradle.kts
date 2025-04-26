@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     id ("com.google.gms.google-services")
+    
+
 }
 
 android {
@@ -43,6 +45,8 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth:22.3.0")
     implementation ("com.google.firebase:firebase-database")
     implementation ("com.google.firebase:firebase-analytics")
+    implementation ("com.google.android.gms:play-services-auth:21.0.0") // For Google Sign-In
+    implementation ("com.facebook.android:facebook-android-sdk:16.1.3") // For Facebook Login
     implementation ("com.airbnb.android:lottie:6.3.0")
     implementation ("com.google.code.gson:gson:2.8.5")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
