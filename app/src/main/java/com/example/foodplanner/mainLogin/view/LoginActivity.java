@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.foodplanner.MainActivity;
 import com.example.foodplanner.R;
-import com.example.foodplanner.SignUpActivity;
+import com.example.foodplanner.SignUP.view.SignUpActivity;
 import com.example.foodplanner.mainLogin.presenter.MainLoginPresenter;
 import com.example.foodplanner.mainLogin.presenter.MainLoginPresenterImpl;
 import com.facebook.FacebookSdk;
@@ -78,10 +78,10 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
         });
 
         // Auto-login if already authenticated
-        if (firebaseAuth.getCurrentUser() != null) {
+     /*   if (firebaseAuth.getCurrentUser() != null) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
-        }
+        }*/
 
 
 
