@@ -1,21 +1,20 @@
-package com.example.foodplanner;
+package com.example.foodplanner.mainLogin.view;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
+import com.example.foodplanner.MainActivity;
+import com.example.foodplanner.R;
+import com.example.foodplanner.SignUpActivity;
+import com.example.foodplanner.mainLogin.presenter.MainLoginPresenter;
+import com.example.foodplanner.mainLogin.presenter.MainLoginPresenterImpl;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,8 +22,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 
@@ -32,12 +29,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Arrays;
 
-
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements mainLoginView {
 
     //private EditText editEmail, editPassword;
+
+    private MainLoginPresenter mainLoginPresenter;
+
+    private ProgressBar progressBar;
     private Button btnSignUp, btnGuest;
 
     private static final int RC_GOOGLE_SIGN_IN = 1001;
@@ -56,8 +55,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mainLoginPresenter = new MainLoginPresenterImpl(this);
+
       //  editEmail = findViewById(R.id.edit_email);
       //  editPassword = findViewById(R.id.edit_password);
+        progressBar = findViewById(R.id.progressBar);
         btnLogin = findViewById(R.id.btn_login);
         btnSignUp = findViewById(R.id.btn_signup);
         btnGuest = findViewById(R.id.btn_guest);
@@ -66,13 +68,13 @@ public class LoginActivity extends AppCompatActivity {
 
         setGoogleButtonText(googleBtn, "Continue with Google");
 
+        configureGoogleSignIn();
         firebaseAuth = FirebaseAuth.getInstance();
 
         btnLogin.setOnClickListener(v -> loginUser());
         btnSignUp.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
         btnGuest.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            mainLoginPresenter.loginAsGuest();
         });
 
         // Auto-login if already authenticated
@@ -80,11 +82,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-           googleSignInClient = GoogleSignIn.getClient(this, gso);
+
 
 
         googleBtn.setOnClickListener(view -> {
@@ -121,6 +119,15 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
+    private void configureGoogleSignIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+    }
+
     private void setGoogleButtonText(SignInButton signInButton, String buttonText) {
         for (int i = 0; i < signInButton.getChildCount(); i++) {
             View v = signInButton.getChildAt(i);
@@ -186,6 +193,27 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void showLoading() {
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        if (progressBar != null) progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onLoginSuccess() {
+        Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public void onLoginFailure(String message) {
+        Toast.makeText(this, "Login Failed: " + message, Toast.LENGTH_LONG).show();
+    }
 }
 
 

@@ -9,6 +9,8 @@ import android.content.Intent;
 
 import android.os.Handler;
 
+import com.example.foodplanner.mainLogin.view.LoginActivity;
+
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -18,7 +18,7 @@
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".mainLogin.view.LoginActivity"
             android:exported="false" /> <!-- Splash screen is the launcher -->
         <activity
             android:name=".SplashActivity"
