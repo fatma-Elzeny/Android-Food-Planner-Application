@@ -5,11 +5,10 @@ package com.example.foodplanner.SignUP.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.foodplanner.MainActivity;
+import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.R;
 import com.example.foodplanner.SignUP.presenter.SignUpPresenter;
 import com.example.foodplanner.SignUP.presenter.SignUpPresenterImpl;

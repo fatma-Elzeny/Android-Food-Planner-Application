@@ -27,6 +27,12 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
         mealAPIService = retrofit.create(MealAPIService.class);
 
     }
+    public static MealsRemoteDataSourceImpl getInstance() {
+        if (client == null) {
+            client = new MealsRemoteDataSourceImpl();
+        }
+        return client;
+    }
 
     @Override
     public void getMealOfTheDay(NetworkCallback<Object> callback) {
