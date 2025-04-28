@@ -15,7 +15,7 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     private PlannedMealDao plannedMealDao;
     private Executor executor;
 
-    public LocalDataSourceImpl(Context context) {
+    public MealsLocalDataSourceImpl(Context context) {
         AppDataBase db = AppDataBase.getInstance(context);
         favoriteMealDao = db.favoriteMealDao();
         plannedMealDao = db.plannedMealDao();

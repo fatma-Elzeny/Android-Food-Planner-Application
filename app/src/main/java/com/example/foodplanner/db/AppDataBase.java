@@ -9,6 +9,8 @@ public abstract class AppDataBase extends RoomDatabase {
     private static AppDataBase instance;
 
     public abstract MealDAO mealDao();
+    public abstract FavoriteMealDao favoriteMealDao();
+    public abstract PlannedMealDao plannedMealDao();
 
     public static  AppDataBase getInstance(Context context) {
         if (instance == null) {
