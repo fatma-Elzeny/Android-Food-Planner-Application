@@ -17,10 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
+import com.example.foodplanner.db.MealsLocalDataSource;
+import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.home.presenter.HomePresenter;
 import com.example.foodplanner.home.presenter.HomePresenterImpl;
 import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepository;
+import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 
 import java.util.List;
@@ -47,10 +50,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         lazyMealsRecycler = findViewById(R.id.lazyMealsRecycler);
         progressBar = findViewById(R.id.progressBarMain);
 
-        MealsRepository repository = new MealsRepository(
-                MealsRemoteDataSourceImpl.getInstance(),
-                new LocalDataSourceImpl(this)
-        );
+        MealsRepository repository = new MealsRepositoryImpl(this);
         presenter = new HomePresenterImpl(this, repository);
 
         adapter = new LazyMealAdapter(this, this);

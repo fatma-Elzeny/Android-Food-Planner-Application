@@ -13,12 +13,12 @@
         android:src="@drawable/backgroundsignup"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"/>
-    <View
+ <!--   <View
         android:id="@+id/gradient_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.7"
-        android:background="@drawable/gradient_overlay" />
+        android:background="@drawable/gradient_overlay" /> -->
 
     <!-- Main Content -->
     <ScrollView

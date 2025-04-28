@@ -1,5 +1,6 @@
 package com.example.foodplanner.db;
 
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -7,7 +8,7 @@ import androidx.room.Query;
 import com.example.foodplanner.model.PlannedMeal;
 
 import java.util.List;
-
+@Dao
 public interface PlannedMealDao {
 
     @Insert

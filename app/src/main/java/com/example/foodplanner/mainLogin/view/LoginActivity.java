@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
         });
 
         // Auto-login if already authenticated
-     /*   if (firebaseAuth.getCurrentUser() != null) {
+   /*   if (firebaseAuth.getCurrentUser() != null) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }*/

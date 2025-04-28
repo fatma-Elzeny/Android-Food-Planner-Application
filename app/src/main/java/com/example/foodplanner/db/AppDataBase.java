@@ -2,8 +2,20 @@ package com.example.foodplanner.db;
 
 import android.content.Context;
 
+import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+
+import com.example.foodplanner.model.FavoriteMeal;
+import com.example.foodplanner.model.Meal;
+import com.example.foodplanner.model.PlannedMeal;
+
+
+@Database(
+        entities = {FavoriteMeal.class, PlannedMeal.class,Meal.class},
+        version = 1,
+        exportSchema = false
+)
 
 public abstract class AppDataBase extends RoomDatabase {
     private static AppDataBase instance;

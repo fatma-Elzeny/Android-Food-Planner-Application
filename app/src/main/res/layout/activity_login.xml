@@ -14,12 +14,12 @@
         android:src="@drawable/background" />
 
     <!-- Gradient overlay -->
-    <View
+ <!--   <View
         android:id="@+id/gradient_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.7"
-        android:background="@drawable/gradient_overlay" />
+        android:background="@drawable/gradient_overlay" /> -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
