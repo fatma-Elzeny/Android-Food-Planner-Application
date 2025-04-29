@@ -22,7 +22,7 @@
             android:name=".PlannerActivity"
             android:exported="false" />
         <activity
-            android:name=".FavoritesActivity"
+            android:name=".Favorite.view.FavoritesActivity"
             android:exported="false" />
         <activity
             android:name=".MealDetail.view.MealDetailsActivity"

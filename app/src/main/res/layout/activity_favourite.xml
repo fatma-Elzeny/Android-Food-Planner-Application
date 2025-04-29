@@ -5,6 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FavoritesActivity">
+    tools:context=".Favorite.view.FavoritesActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
