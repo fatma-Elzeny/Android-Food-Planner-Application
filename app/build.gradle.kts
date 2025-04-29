@@ -45,6 +45,7 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth:22.3.0")
     implementation ("com.google.firebase:firebase-database")
     implementation ("com.google.firebase:firebase-analytics")
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation ("com.google.android.gms:play-services-auth:21.0.0") // For Google Sign-In
     implementation ("com.facebook.android:facebook-android-sdk:16.1.3") // For Facebook Login
     implementation ("com.airbnb.android:lottie:6.3.0")

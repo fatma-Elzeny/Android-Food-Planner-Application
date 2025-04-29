@@ -13,6 +13,10 @@ public class FavoriteMeal {
     private String strCategory;
     private String strArea;
     private String strMealThumb;
+   public FavoriteMeal(){
+
+
+   }
 
     public FavoriteMeal(String idMeal, String strMeal, String strCategory, String strArea, String strMealThumb) {
         this.idMeal = idMeal;
