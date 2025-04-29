@@ -14,7 +14,12 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.SignUP.view.SignUpActivity;
 import com.example.foodplanner.mainLogin.presenter.MainLoginPresenter;
 import com.example.foodplanner.mainLogin.presenter.MainLoginPresenterImpl;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -22,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.common.api.ApiException;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 
@@ -32,7 +38,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity implements mainLoginView {
 
-    //private EditText editEmail, editPassword;
 
     private MainLoginPresenter mainLoginPresenter;
 
@@ -56,25 +61,28 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
         setContentView(R.layout.activity_login);
 
         mainLoginPresenter = new MainLoginPresenterImpl(this);
-
-      //  editEmail = findViewById(R.id.edit_email);
-      //  editPassword = findViewById(R.id.edit_password);
         progressBar = findViewById(R.id.progressBar);
         btnLogin = findViewById(R.id.btn_login);
         btnSignUp = findViewById(R.id.btn_signup);
         btnGuest = findViewById(R.id.btn_guest);
         googleBtn = findViewById(R.id.btn_google);
-       // LoginButton facebookBtn = findViewById(R.id.btn_facebook);
-
+        LoginButton facebookBtn = findViewById(R.id.btn_facebook);
         setGoogleButtonText(googleBtn, "Continue with Google");
 
         configureGoogleSignIn();
+
         firebaseAuth = FirebaseAuth.getInstance();
+        FacebookSdk.setApplicationId(getString(R.string.facebook_app_id));
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         btnLogin.setOnClickListener(v -> loginUser());
         btnSignUp.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
         btnGuest.setOnClickListener(v -> {
             mainLoginPresenter.loginAsGuest();
+        });
+        googleBtn.setOnClickListener(view -> {
+            Intent signInIntent = googleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
         });
 
         // Auto-login if already authenticated
@@ -84,17 +92,9 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
         }*/
 
 
-
-        googleBtn.setOnClickListener(view -> {
-            Intent signInIntent = googleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
-        });
-        FacebookSdk.setApplicationId(getString(R.string.facebook_app_id));
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
         // Facebook Login setup
 
-      /*  facebookBtn.setPermissions("email", "public_profile");
+       facebookBtn.setPermissions("email", "public_profile");
 
         CallbackManager callbackManager = CallbackManager.Factory.create();
         facebookBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
             public void onError(FacebookException error) {
                 toast("Facebook error: " + error.getMessage());
             }
-        });*/
+        });
 
 
     }
@@ -143,8 +143,8 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
         //String email = editEmail.getText().toString();
        // String password = editPassword.getText().toString();
 
-     //  if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-    //   Toast.makeText(this, "Email and Password required", Toast.LENGTH_SHORT).show();
+       //  if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+       //  Toast.makeText(this, "Email and Password required", Toast.LENGTH_SHORT).show();
         //    return;
         //}
 

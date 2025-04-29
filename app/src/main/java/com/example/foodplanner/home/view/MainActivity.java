@@ -2,29 +2,23 @@ package com.example.foodplanner.home.view;
 
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.foodplanner.MealDetailsActivity;
+import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.R;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import com.example.foodplanner.R;
-import com.example.foodplanner.db.MealsLocalDataSource;
-import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.home.presenter.HomePresenter;
 import com.example.foodplanner.home.presenter.HomePresenterImpl;
 import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepository;
 import com.example.foodplanner.model.MealsRepositoryImpl;
-import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 
 import java.util.List;
 
