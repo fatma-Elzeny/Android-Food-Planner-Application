@@ -41,7 +41,7 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
 
     @Override
     public List<FavoriteMeal> getAllFavorites() {
-        return favoriteMealDao.getAllFavorites();
+        return (List<FavoriteMeal>) favoriteMealDao.getAllFavorites();
     }
 
     // --------- Planned Meals ---------

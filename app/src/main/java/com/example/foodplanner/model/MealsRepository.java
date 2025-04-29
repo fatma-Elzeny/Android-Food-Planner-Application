@@ -1,5 +1,7 @@
 package com.example.foodplanner.model;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.foodplanner.network.NetworkCallback;
 
 import java.util.List;
@@ -17,7 +19,8 @@ public interface MealsRepository {
     // --- Local Database Methods ---
     void insertFavorite(FavoriteMeal meal);
     void deleteFavorite(FavoriteMeal meal);
-    List<FavoriteMeal> getAllFavorites();
+    LiveData<List<FavoriteMeal>> getAllFavorites();
+
     FavoriteMeal getFavoriteById(String id);
 
     void insertPlannedMeal(PlannedMeal meal);

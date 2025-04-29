@@ -56,6 +56,8 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
     implementation("androidx.room:room-runtime:2.7.0")
     annotationProcessor("androidx.room:room-compiler:2.7.0")
+    implementation ("com.google.android.material:material:1.10.0")// or latest
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

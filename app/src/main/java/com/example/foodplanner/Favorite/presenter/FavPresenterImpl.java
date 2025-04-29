@@ -1,5 +1,7 @@
 package com.example.foodplanner.Favorite.presenter;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.foodplanner.Favorite.view.FavoritesView;
 import com.example.foodplanner.model.FavoriteMeal;
 import com.example.foodplanner.model.MealsRepository;
@@ -17,14 +19,9 @@ public class FavPresenterImpl implements Favpresenter {
 
     @Override
     public void getFavoriteMeals() {
-        List<FavoriteMeal> meals = repository.getAllFavorites();
-        if (meals == null || meals.isEmpty()) {
-            view.showEmptyState();
-        } else {
-            view.showFavorites(meals);
-        }
+        LiveData<List<FavoriteMeal>> liveData = repository.getAllFavorites();
+        view.observeFavorites(liveData);
     }
-
     @Override
     public void deleteMeal(FavoriteMeal meal) {
         repository.deleteFavorite(meal);

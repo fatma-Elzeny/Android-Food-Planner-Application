@@ -1,5 +1,6 @@
 package com.example.foodplanner.db;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -20,7 +21,8 @@ public interface MealDAO {
     void deleteFavorite(FavoriteMeal meal);
 
     @Query("SELECT * FROM favorite_meals")
-    List<FavoriteMeal> getAllFavorites();
+    LiveData<List<FavoriteMeal>> getAllFavorites(); // ✅ works with Room + LiveData
+
 
     @Query("SELECT * FROM favorite_meals WHERE idMeal = :mealId")
     FavoriteMeal getFavoriteById(String mealId);
