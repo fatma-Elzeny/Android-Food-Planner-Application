@@ -95,7 +95,7 @@ public class MealsRepositoryImpl implements MealsRepository {
 
     @Override
     public FavoriteMeal getFavoriteById(String id) {
-        // Optional: wrap in background thread if used in UI
+
         return mealDao.getFavoriteById(id);
     }
 

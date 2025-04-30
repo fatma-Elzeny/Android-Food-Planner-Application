@@ -4,4 +4,6 @@ import com.example.foodplanner.model.FavoriteMeal;
 
 public interface OnFavMealClickListener {
     void onFavoriteMealClick(FavoriteMeal meal);
+
+    void onDeleteClick(FavoriteMeal meal);
 }

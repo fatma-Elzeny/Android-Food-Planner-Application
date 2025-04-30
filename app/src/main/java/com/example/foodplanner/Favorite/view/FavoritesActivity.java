@@ -1,6 +1,10 @@
 package com.example.foodplanner.Favorite.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.Favorite.presenter.FavPresenterImpl;
 import com.example.foodplanner.Favorite.presenter.Favpresenter;
+import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.FavoriteMeal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
@@ -22,11 +27,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 
-public class FavoritesActivity extends AppCompatActivity implements FavoritesView,OnFavMealClickListener{
+public class FavoritesActivity extends AppCompatActivity implements FavoritesView,OnFavMealClickListener {
 
     private Favpresenter presenter;
     private RecyclerView recyclerView;
     private FavoritesAdapter adapter;
+
+    private LinearLayout emptyStateLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,8 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         setContentView(R.layout.activity_favourite);
 
         recyclerView = findViewById(R.id.recycler_favorites);
+        emptyStateLayout = findViewById(R.id.empty_state_layout);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new FavoritesAdapter(this);
         recyclerView.setAdapter(adapter);
@@ -42,25 +52,37 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         presenter.getFavoriteMeals();
     }
 
-    private void onMealClicked(FavoriteMeal meal) {
-        showDeleteConfirmation(meal);
-    }
+
 
 
     @Override
     public void showEmptyState() {
+        recyclerView.setVisibility(View.GONE);
+        emptyStateLayout.setVisibility(View.VISIBLE);
         Toast.makeText(this, "No favorite meals yet.", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void showDeleteConfirmation(FavoriteMeal meal) {
+    //@Override
+   /* public void showDeleteConfirmation(FavoriteMeal meal) {
         new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
                 .setTitle("Delete Favorite")
                 .setMessage("Are you sure you want to remove \"" + meal.getStrMeal() + "\" from favorites?")
                 .setPositiveButton("Yes", (dialog, which) -> presenter.deleteMeal(meal))
                 .setNegativeButton("Cancel", null)
                 .show();
+    }*/
+    private void showLottieDeleteDialog(FavoriteMeal meal) {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_delete, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogTheme)
+                .setView(dialogView)
+                .setPositiveButton("Delete", (d, which) -> presenter.deleteMeal(meal))
+                .setNegativeButton("Cancel", null)
+                .create();
+
+        dialog.show();
     }
+
 
     @Override
     protected void onDestroy() {
@@ -69,21 +91,30 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     }
 
 
-
     @Override
     public void onFavoriteMealClick(FavoriteMeal meal) {
-        showDeleteConfirmation(meal);
+        Intent intent = new Intent(this, MealDetailsActivity.class);
+        intent.putExtra("meal_id", meal.getIdMeal());
+        startActivity(intent);
     }
-
+    @Override
+    public void onDeleteClick(FavoriteMeal meal) {
+        showLottieDeleteDialog(meal);
+    }
     @Override
     public void observeFavorites(LiveData<List<FavoriteMeal>> liveData) {
         liveData.observe(this, meals -> {
             if (meals == null || meals.isEmpty()) {
-                showEmptyState();
+                // 🔻 Show empty state
+                recyclerView.setVisibility(View.GONE);
+                emptyStateLayout.setVisibility(View.VISIBLE);
             } else {
+                // ✅ Show list
+                emptyStateLayout.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
                 adapter.setMeals(meals);
             }
         });
-    }
 
+    }
 }

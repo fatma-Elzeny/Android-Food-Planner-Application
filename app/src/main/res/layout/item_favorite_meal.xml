@@ -1,31 +1,63 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:layout_marginTop="4dp"
-    android:elevation="4dp"
-    android:padding="8dp">
+    android:layout_margin="8dp"
+    android:elevation="6dp"
+    app:cardCornerRadius="16dp"
+    app:cardBackgroundColor="@android:color/white">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:padding="12dp">
 
+        <!-- Meal Image -->
         <ImageView
             android:id="@+id/img_meal"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
             android:scaleType="centerCrop"
-            android:layout_marginEnd="8dp" />
+            android:layout_alignParentTop="true"
+            android:background="@drawable/image_rounded_mask" />
 
+        <!-- Meal Title -->
         <TextView
             android:id="@+id/txt_meal_name"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_below="@id/img_meal"
+            android:layout_marginTop="10dp"
+            android:text="Meal Name"
+            android:textAlignment="center"
             android:textSize="18sp"
-            android:textColor="@android:color/black"
-            android:text="Meal name" />
-    </LinearLayout>
+            android:textStyle="bold"
+            android:textColor="@color/purple_accent" />
+
+        <!-- Delete Icon Button -->
+        <ImageButton
+            android:id="@+id/btn_remove_favorite"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@id/img_meal"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Remove" />
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

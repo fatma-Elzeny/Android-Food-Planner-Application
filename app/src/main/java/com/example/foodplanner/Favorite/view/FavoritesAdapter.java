@@ -3,6 +3,7 @@ package com.example.foodplanner.Favorite.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,8 +43,8 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         FavoriteMeal meal = meals.get(position);
         holder.title.setText(meal.getStrMeal());
         Glide.with(holder.itemView.getContext()).load(meal.getStrMealThumb()).into(holder.image);
-
         holder.itemView.setOnClickListener(v -> listener.onFavoriteMealClick(meal));
+        holder.delete.setOnClickListener(v -> listener.onDeleteClick(meal));
     }
 
     @Override
@@ -55,10 +56,13 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
         ImageView image;
         TextView title;
 
+        ImageButton delete;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.img_meal);
             title = itemView.findViewById(R.id.txt_meal_name);
+            delete = itemView.findViewById(R.id.btn_remove_favorite);
         }
     }
 }
