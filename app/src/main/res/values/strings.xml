@@ -2,4 +2,13 @@
     <string name="app_name">FoodPlanner</string>
     <string name="default_web_client_id">433653932448-m9h594749qj963rld38vv5mhseimj28f.apps.googleusercontent.com</string>
     <string name="facebook_app_id">3499500953518304</string>
+    <string name="error_network_request_failed">Network request failed: %s</string>
+    <string name="error_favorite_insert_failed">Failed to add favorite: %s</string>
+    <string name="error_favorite_delete_failed">Failed to remove favorite: %s</string>
+    <string name="error_planned_insert_failed">Failed to plan meal: %s</string>
+    <string name="error_planned_delete_failed">Failed to remove planned meal: %s</string>
+    <string name="error_meal_already_planned">This meal is already planned for this day</string>
+    <string name="error_planned_not_found">Planned meal not found</string>
+    <string name="error_no_planned_meals">No meals planned for %s</string>
+    <string name="error_db_query_failed">Database error: %s</string>
 </resources>

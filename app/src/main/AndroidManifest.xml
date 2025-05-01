@@ -19,7 +19,7 @@
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".PlannerActivity"
+            android:name=".planner.view.PlannerActivity"
             android:exported="false" />
         <activity
             android:name=".Favorite.view.FavoritesActivity"

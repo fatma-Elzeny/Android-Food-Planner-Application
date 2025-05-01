@@ -23,8 +23,8 @@ public interface MealsRepository {
 
     FavoriteMeal getFavoriteById(String id);
 
-    void insertPlannedMeal(PlannedMeal meal);
-    void deletePlannedMeal(PlannedMeal meal);
-    List<PlannedMeal> getMealsByDay(String day);
+    void getMealsByDay(String day, NetworkCallback<List<PlannedMeal>> callback);
+    void insertPlannedMeal(PlannedMeal meal, NetworkCallback<Void> callback);
+    void deletePlannedMeal(PlannedMeal meal, NetworkCallback<Void> callback);;
     List<PlannedMeal> getAllPlannedMeals();
 }

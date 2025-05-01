@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.mainLogin.view.LoginActivity;
+import com.example.foodplanner.planner.view.PlannerActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends AppCompatActivity {

@@ -18,6 +18,15 @@ public class PlannedMeal {
     private String mealName;
     private String mealThumb;
     private String day;
+    private String date;
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
 
     public PlannedMeal() {
     }
@@ -68,4 +77,5 @@ public class PlannedMeal {
     public void setDay(String day) {
         this.day = day;
     }
+
 }

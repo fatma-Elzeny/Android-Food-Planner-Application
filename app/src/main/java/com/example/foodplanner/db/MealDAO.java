@@ -11,7 +11,6 @@ import com.example.foodplanner.model.PlannedMeal;
 
 import java.util.List;
 @Dao
-
 public interface MealDAO {
     // Favorite meals
     @Insert

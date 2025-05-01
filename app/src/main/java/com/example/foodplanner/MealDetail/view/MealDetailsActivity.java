@@ -3,6 +3,8 @@ package com.example.foodplanner.MealDetail.view;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -33,8 +36,11 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class MealDetailsActivity extends AppCompatActivity implements MealDetailsView {
 
@@ -56,6 +62,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,13 +75,12 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         progressBar = findViewById(R.id.progress_bar);
         categoryText = findViewById(R.id.meal_category);
         countryText = findViewById(R.id.meal_country);
-
+        btnPlanner = findViewById(R.id.btn_add_planner);
         ingredientsRecycler = findViewById(R.id.ingredients_recycler);
         ingredientsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
 
         String mealId = getIntent().getStringExtra("MEAL_ID");
-
         presenter = new MealDetailPresenterImpl(this, new MealsRepositoryImpl(this));
         presenter.getMealDetails(mealId);
 
@@ -95,16 +101,60 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
         btnPlanner.setOnClickListener(v -> {
             if (currentMeal != null) {
-                PlannedMeal planned = new PlannedMeal();
-                planned.setMealName(currentMeal.getStrMeal());
-                planned.setDay("Monday"); // You can show dialog to pick day
-
-                new MealsRepositoryImpl(this).insertPlannedMeal(planned);
-                Toast.makeText(this, "Added to Planner", Toast.LENGTH_SHORT).show();
+                showPlannerCalendarDialog();
             }
         });
     }
 
+    private void showPlannerCalendarDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_planner_calendar, null);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+        CalendarView calendarView = dialogView.findViewById(R.id.calendar_view);
+        Button btnConfirm = dialogView.findViewById(R.id.btn_confirm);
+
+        // Get current date
+        Calendar calendar = Calendar.getInstance();
+        long today = calendar.getTimeInMillis();
+
+        // Set min date to today
+        calendarView.setMinDate(today);
+
+        // Set max date to end of current week (6 days from today)
+        calendar.add(Calendar.DAY_OF_YEAR, 6);
+        long maxDate = calendar.getTimeInMillis();
+        calendarView.setMaxDate(maxDate);
+
+        // Set initial selection to today
+        calendarView.setDate(today, true, true);
+
+        btnConfirm.setOnClickListener(v -> {
+            long selectedDate = calendarView.getDate();
+            Calendar selectedCalendar = Calendar.getInstance();
+            selectedCalendar.setTimeInMillis(selectedDate);
+
+            String dayName = new SimpleDateFormat("EEEE", Locale.getDefault()).format(selectedCalendar.getTime());
+            String formattedDate = new SimpleDateFormat("MMM dd", Locale.getDefault()).format(selectedCalendar.getTime());
+
+            if (currentMeal != null) {
+                PlannedMeal planned = new PlannedMeal();
+                planned.setMealId(currentMeal.getIdMeal());
+                planned.setMealName(currentMeal.getStrMeal());
+                planned.setDay(dayName);
+                planned.setDate(formattedDate); // Add this field to your PlannedMeal model
+
+                new MealsRepositoryImpl(this).insertPlannedMeal(planned);
+                Toast.makeText(this, "Meal planned for " + dayName + " (" + formattedDate + ")",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
     @Override
     public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
