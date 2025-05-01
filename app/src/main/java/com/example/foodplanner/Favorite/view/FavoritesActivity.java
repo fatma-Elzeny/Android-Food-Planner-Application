@@ -1,11 +1,14 @@
 package com.example.foodplanner.Favorite.view;
 
+import static android.view.View.VISIBLE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,14 +21,20 @@ import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.ConnectionLiveData;
 import com.example.foodplanner.Favorite.presenter.FavPresenterImpl;
 import com.example.foodplanner.Favorite.presenter.Favpresenter;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.NoInternetDialog;
 import com.example.foodplanner.R;
+import com.example.foodplanner.SearchActivity;
+import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.model.FavoriteMeal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
+import com.example.foodplanner.planner.view.PlannerActivity;
+import com.example.foodplanner.profile.view.ProfileActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
@@ -35,23 +44,49 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     private Favpresenter presenter;
     private RecyclerView recyclerView;
     private FavoritesAdapter adapter;
-    private LinearLayout emptyStateLayout;
 
-
+   private TextView no_fav_text;
+   private LottieAnimationView no_fav_animation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite);
 
-        recyclerView = findViewById(R.id.recycler_favorites);
-        emptyStateLayout = findViewById(R.id.empty_state_layout);
-
+        recyclerView = findViewById(R.id.rv_favorites);
+        no_fav_text = findViewById(R.id.no_fav_text);
+        no_fav_animation =findViewById(R.id.no_fav_animation);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new FavoritesAdapter(this);
         recyclerView.setAdapter(adapter);
 
         presenter = new FavPresenterImpl(this, new MealsRepositoryImpl(this));
         presenter.getFavoriteMeals();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_favorites);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.navigation_favorites) {
+                return true; // Stay here
+            } else if (id == R.id.navigation_home) {
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            } else if (id == R.id.navigation_planner) {
+                startActivity(new Intent(this, PlannerActivity.class));
+                return true;
+            } else if (id == R.id.navigation_profile) {
+                startActivity(new Intent(this, ProfileActivity.class));
+                return true;
+            } else if (id == R.id.navigation_search) {
+                startActivity(new Intent(this, SearchActivity.class));
+                return true;
+            }
+
+            return false;
+        });
+
+
     }
 
 
@@ -60,7 +95,8 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     @Override
     public void showEmptyState() {
         recyclerView.setVisibility(View.GONE);
-        emptyStateLayout.setVisibility(View.VISIBLE);
+        no_fav_text.setVisibility(VISIBLE);
+        no_fav_animation.setVisibility(VISIBLE);
         Toast.makeText(this, "No favorite meals yet.", Toast.LENGTH_SHORT).show();
     }
 
@@ -124,11 +160,13 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
             if (meals == null || meals.isEmpty()) {
                 // 🔻 Show empty state
                 recyclerView.setVisibility(View.GONE);
-                emptyStateLayout.setVisibility(View.VISIBLE);
+                 no_fav_text.setVisibility(VISIBLE);
+                no_fav_animation.setVisibility(VISIBLE);
             } else {
                 // ✅ Show list
-                emptyStateLayout.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
+                no_fav_text.setVisibility(VISIBLE);
+                no_fav_animation.setVisibility(VISIBLE);
+                recyclerView.setVisibility(VISIBLE);
                 adapter.setMeals(meals);
             }
         });

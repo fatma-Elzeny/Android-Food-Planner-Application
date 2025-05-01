@@ -1,57 +1,90 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp"
-    android:background="@color/background_light_purple"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_light_purple"
+    android:gravity="center">
 
     <!-- Lottie Animation -->
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/profile_animation"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:lottie_rawRes="@raw/ic_chef"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true" />
 
     <!-- Greeting -->
+
+    <!-- Buttons -->
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/profile_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="108dp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_favorites"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="@+id/btn_favorites"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/ic_chef" />
+
     <TextView
         android:id="@+id/tv_greeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginTop="16dp"
         android:text="Hello, Chef!"
         android:textColor="@color/purple_accent"
         android:textSize="22sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/btn_favorites"
+        app:layout_constraintHorizontal_bias="0.432"
+        app:layout_constraintStart_toStartOf="@+id/btn_favorites"
+        app:layout_constraintTop_toBottomOf="@+id/profile_animation" />
 
-    <!-- Buttons -->
     <Button
         android:id="@+id/btn_favorites"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="353dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/purple_accent"
         android:text="My Favorites"
         android:textColor="@android:color/white"
-        android:backgroundTint="@color/purple_accent"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_greeting" />
 
     <Button
         android:id="@+id/btn_planner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="353dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/purple_accent"
         android:text="My Planner"
         android:textColor="@android:color/white"
-        android:backgroundTint="@color/purple_accent"/>
+        app:layout_constraintEnd_toEndOf="@+id/btn_favorites"
+        app:layout_constraintStart_toStartOf="@+id/btn_favorites"
+        app:layout_constraintTop_toBottomOf="@+id/btn_favorites" />
 
     <Button
         android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="353dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/purple_accent"
         android:text="Logout"
         android:textColor="@android:color/white"
-        android:backgroundTint="@color/purple_accent"
-        android:layout_marginTop="24dp" />
-</LinearLayout>
+        app:layout_constraintEnd_toEndOf="@+id/btn_planner"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_planner"
+        app:layout_constraintTop_toBottomOf="@+id/btn_planner" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_main"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+</androidx.constraintlayout.widget.ConstraintLayout>

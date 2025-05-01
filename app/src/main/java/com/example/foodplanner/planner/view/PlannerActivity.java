@@ -16,12 +16,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.R;
+import com.example.foodplanner.SearchActivity;
+import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.example.foodplanner.model.PlannedMeal;
 import com.example.foodplanner.planner.presenter.PlannerPresenter;
 import com.example.foodplanner.planner.presenter.PlannerPresenterImpl;
+import com.example.foodplanner.profile.view.ProfileActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
@@ -56,15 +61,41 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
         adapter = new PlannerAdapter(new ArrayList<>(), this);
         rvMeals.setLayoutManager(new LinearLayoutManager(this));
         rvMeals.setAdapter(adapter);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_planner);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.navigation_planner) {
+                return true; // Stay here
+            } else if (id == R.id.navigation_favorites) {
+                startActivity(new Intent(this, FavoritesActivity.class));
+                return true;
+            } else if (id == R.id.navigation_home) {
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            } else if (id == R.id.navigation_profile) {
+                startActivity(new Intent(this, ProfileActivity.class));
+                return true;
+            } else if (id == R.id.navigation_search) {
+                startActivity(new Intent(this, SearchActivity.class));
+                return true;
+            }
+
+            return false;
+        });
 
         presenter = new PlannerPresenterImpl(this, new MealsRepositoryImpl(this));
 
         // Limit calendar to current week
-        Calendar todayCalendar = Calendar.getInstance();
-        long today = todayCalendar.getTimeInMillis();
-        calendarView.setMinDate(today);
-        todayCalendar.add(Calendar.DAY_OF_YEAR, 6);
-        calendarView.setMaxDate(todayCalendar.getTimeInMillis());
+        Calendar minDateCalendar = Calendar.getInstance();
+        calendarView.setMinDate(minDateCalendar.getTimeInMillis());
+
+        Calendar maxDateCalendar = Calendar.getInstance();
+        maxDateCalendar.add(Calendar.DAY_OF_YEAR, 6);
+        calendarView.setMaxDate(maxDateCalendar.getTimeInMillis());
+
 
         // Set default date and selected calendar
         calendarView.setDate(Calendar.getInstance().getTimeInMillis(), true, true);

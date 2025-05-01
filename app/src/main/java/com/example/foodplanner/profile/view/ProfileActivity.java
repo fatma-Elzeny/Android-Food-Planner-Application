@@ -10,10 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.R;
+import com.example.foodplanner.SearchActivity;
+import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.mainLogin.view.LoginActivity;
 import com.example.foodplanner.planner.view.PlannerActivity;
 import com.example.foodplanner.profile.presenter.ProfilePresenter;
 import com.example.foodplanner.profile.presenter.ProfilePresenterImpl;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends AppCompatActivity implements ProfileView {
@@ -37,6 +40,31 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         String userName = "Guest"; // or retrieve from Firebase/Auth
         presenter = new ProfilePresenterImpl(this, userName);
         presenter.onViewLoaded();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_profile);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.navigation_profile) {
+                return true; // Stay here
+            } else if (id == R.id.navigation_favorites) {
+                startActivity(new Intent(this, FavoritesActivity.class));
+                return true;
+            } else if (id == R.id.navigation_planner) {
+                startActivity(new Intent(this, PlannerActivity.class));
+                return true;
+            } else if (id == R.id.navigation_home) {
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            } else if (id == R.id.navigation_search) {
+                startActivity(new Intent(this, SearchActivity.class));
+                return true;
+            }
+
+            return false;
+        });
+
 
         btnFavorites.setOnClickListener(v -> presenter.onFavoritesClicked());
         btnPlanner.setOnClickListener(v -> presenter.onPlannerClicked());
