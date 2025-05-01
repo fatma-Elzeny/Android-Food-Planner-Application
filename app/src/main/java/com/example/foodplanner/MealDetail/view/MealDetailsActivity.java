@@ -10,15 +10,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.foodplanner.MealDetail.model.IngredientItem;
 import com.example.foodplanner.MealDetail.presenter.MealDetailPresenter;
 import com.example.foodplanner.MealDetail.presenter.MealDetailPresenterImpl;
 import com.example.foodplanner.R;
+import com.example.foodplanner.Utils;
 import com.example.foodplanner.model.FavoriteMeal;
 import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
@@ -26,6 +31,10 @@ import com.example.foodplanner.model.PlannedMeal;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MealDetailsActivity extends AppCompatActivity implements MealDetailsView {
 
@@ -43,6 +52,9 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     private Meal currentMeal;
     private YouTubePlayerView youtubePlayerView;
 
+    RecyclerView ingredientsRecycler;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +69,8 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         categoryText = findViewById(R.id.meal_category);
         countryText = findViewById(R.id.meal_country);
 
+        ingredientsRecycler = findViewById(R.id.ingredients_recycler);
+        ingredientsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
 
         String mealId = getIntent().getStringExtra("MEAL_ID");
@@ -101,6 +115,33 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         progressBar.setVisibility(View.GONE);
     }
 
+    @Override
+    public void showMealDetails(Meal meal) {
+        this.currentMeal = meal;
+
+        mealName.setText(meal.getStrMeal());
+        mealInstructions.setText(meal.getStrInstructions());
+        Glide.with(this).load(meal.getStrMealThumb()).into(mealImage);
+
+        categoryText.setText("Category: " + meal.getStrCategory());
+        countryText.setText("Country: " + meal.getStrArea());
+
+        // ✅ Use helper method instead of reflection
+        List<IngredientItem> ingredientItems = meal.getIngredientItemList();
+        ingredientsRecycler.setAdapter(new IngredientAdapter(ingredientItems));
+
+        // ✅ Safe video loading
+        String videoId = extractYoutubeVideoId(meal.getStrYoutube());
+        if (videoId != null) {
+            youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(YouTubePlayer youTubePlayer) {
+                    youTubePlayer.loadVideo(videoId, 0);
+                }
+            });
+        }
+    }
+
 
     private String extractYoutubeVideoId(String url) {
         Uri uri = Uri.parse(url);
@@ -108,28 +149,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     }
 
 
-    @Override
-    public void showMealDetails(Meal meal) {
-       this.currentMeal= meal;
-        mealName.setText(meal.getStrMeal());
-        mealInstructions.setText(meal.getStrInstructions());
-        Glide.with(this).load(meal.getStrMealThumb()).into(mealImage);
 
-
-        categoryText.setText("Category: " + meal.getStrCategory());
-        countryText.setText("Country: " + meal.getStrArea());
-
-        String videoId = extractYoutubeVideoId(meal.getStrYoutube());
-
-        youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(YouTubePlayer youTubePlayer) {
-                youTubePlayer.loadVideo(videoId, 0);
-            }
-        });
-
-
-    }
 
     @Override
     public void showError(String message) {

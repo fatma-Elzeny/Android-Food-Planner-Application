@@ -77,6 +77,27 @@
           android:textColor="@color/black" />
     </LinearLayout>
 
+    <TextView
+        android:text="Ingredients:"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/purple_accent"
+        android:layout_marginTop="18dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ingredients_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
+        android:orientation="horizontal"
+        android:overScrollMode="never"
+        android:nestedScrollingEnabled="false" />
+
+
     <!-- Section Title -->
     <TextView
         android:layout_width="wrap_content"

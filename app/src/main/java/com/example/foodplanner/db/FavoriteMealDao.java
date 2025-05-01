@@ -25,4 +25,5 @@ public interface FavoriteMealDao {
     @Query("SELECT * FROM favorite_meals")
     LiveData<List<FavoriteMeal>> getAllFavorites();
 
+
 }

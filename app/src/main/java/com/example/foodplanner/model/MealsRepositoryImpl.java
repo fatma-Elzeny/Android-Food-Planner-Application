@@ -8,19 +8,12 @@ import com.example.foodplanner.db.MealDAO;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.foodplanner.db.MealsLocalDataSource;
-import com.example.foodplanner.db.MealsLocalDataSourceImpl;
-import com.example.foodplanner.model.FavoriteMeal;
-import com.example.foodplanner.model.PlannedMeal;
 import com.example.foodplanner.network.MealsRemoteDataSource;
 import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.example.foodplanner.network.NetworkCallback;
-
-import java.util.List;
 
 public class MealsRepositoryImpl implements MealsRepository {
     private final MealDAO mealDao;

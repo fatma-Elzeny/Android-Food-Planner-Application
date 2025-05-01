@@ -17,9 +17,11 @@ import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.foodplanner.ConnectionLiveData;
 import com.example.foodplanner.Favorite.presenter.FavPresenterImpl;
 import com.example.foodplanner.Favorite.presenter.Favpresenter;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
+import com.example.foodplanner.NoInternetDialog;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.FavoriteMeal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
@@ -32,7 +34,6 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     private Favpresenter presenter;
     private RecyclerView recyclerView;
     private FavoritesAdapter adapter;
-
     private LinearLayout emptyStateLayout;
 
 
@@ -117,4 +118,6 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         });
 
     }
+
+
 }

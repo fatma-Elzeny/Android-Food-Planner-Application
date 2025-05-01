@@ -4,6 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.example.foodplanner.MealDetail.model.IngredientItem;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(tableName = "Meals_table")
 public class Meal {
     @NonNull
@@ -24,6 +30,29 @@ public class Meal {
         this.strMealThumb = strMealThumb;
         this.strInstructions = strInstructions;
         this.strYoutube = strYoutube;
+    }
+    public List<IngredientItem> getIngredientItemList() {
+        List<IngredientItem> ingredients = new ArrayList<>();
+        try {
+            for (int i = 1; i <= 20; i++) {
+                Field ingredientField = this.getClass().getDeclaredField("strIngredient" + i);
+                Field measureField = this.getClass().getDeclaredField("strMeasure" + i);
+
+                ingredientField.setAccessible(true);
+                measureField.setAccessible(true);
+
+                String ingredient = (String) ingredientField.get(this);
+                String measure = (String) measureField.get(this);
+
+                if (ingredient != null && !ingredient.trim().isEmpty()) {
+                    String imageUrl = "https://www.themealdb.com/images/ingredients/" + ingredient.trim() + ".png";
+                    ingredients.add(new IngredientItem(ingredient.trim(), measure != null ? measure.trim() : "", imageUrl));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Avoid crashing app
+        }
+        return ingredients;
     }
 
     public String getIdMeal() {

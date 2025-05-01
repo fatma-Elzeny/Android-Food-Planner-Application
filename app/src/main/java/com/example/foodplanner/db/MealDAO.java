@@ -39,4 +39,29 @@ public interface MealDAO {
 
     @Query("SELECT * FROM planned_meals")
     List<PlannedMeal> getAllPlannedMeals();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
