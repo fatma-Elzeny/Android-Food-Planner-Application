@@ -1,5 +1,6 @@
 package com.example.foodplanner.Favorite.view;
 
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.content.Intent;
@@ -94,32 +95,12 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
 
     @Override
     public void showEmptyState() {
-        recyclerView.setVisibility(View.GONE);
+        recyclerView.setVisibility(GONE);
         no_fav_text.setVisibility(VISIBLE);
         no_fav_animation.setVisibility(VISIBLE);
         Toast.makeText(this, "No favorite meals yet.", Toast.LENGTH_SHORT).show();
     }
 
-    //@Override
-   /* public void showDeleteConfirmation(FavoriteMeal meal) {
-        new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                .setTitle("Delete Favorite")
-                .setMessage("Are you sure you want to remove \"" + meal.getStrMeal() + "\" from favorites?")
-                .setPositiveButton("Yes", (dialog, which) -> presenter.deleteMeal(meal))
-                .setNegativeButton("Cancel", null)
-                .show();
-    }*/
-  /*  private void showLottieDeleteDialog(FavoriteMeal meal) {
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_delete, null);
-
-        AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogTheme)
-                .setView(dialogView)
-                .setPositiveButton("Delete", (d, which) -> presenter.deleteMeal(meal))
-                .setNegativeButton("Cancel", null)
-                .create();
-
-        dialog.show();
-    }*/
 
 
     @Override
@@ -132,7 +113,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     @Override
     public void onFavoriteMealClick(FavoriteMeal meal) {
         Intent intent = new Intent(this, MealDetailsActivity.class);
-        intent.putExtra("meal_id", meal.getIdMeal());
+        intent.putExtra("MEAL_ID", meal.getIdMeal());
         startActivity(intent);
     }
     @Override
@@ -159,13 +140,13 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         liveData.observe(this, meals -> {
             if (meals == null || meals.isEmpty()) {
                 // 🔻 Show empty state
-                recyclerView.setVisibility(View.GONE);
-                 no_fav_text.setVisibility(VISIBLE);
+                recyclerView.setVisibility(GONE);
+                no_fav_text.setVisibility(VISIBLE);
                 no_fav_animation.setVisibility(VISIBLE);
             } else {
                 // ✅ Show list
-                no_fav_text.setVisibility(VISIBLE);
-                no_fav_animation.setVisibility(VISIBLE);
+                no_fav_text.setVisibility(GONE);
+                no_fav_animation.setVisibility(GONE);
                 recyclerView.setVisibility(VISIBLE);
                 adapter.setMeals(meals);
             }

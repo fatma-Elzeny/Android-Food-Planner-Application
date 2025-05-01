@@ -29,7 +29,7 @@ public interface MealsRepository {
 
     LiveData<List<FavoriteMeal>> getAllFavorites();
 
-    FavoriteMeal getFavoriteById(String id);
+    LiveData<FavoriteMeal> getFavoriteById(String id);
 
     void insertPlannedMeal(PlannedMeal meal);
 

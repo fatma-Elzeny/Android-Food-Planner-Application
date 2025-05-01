@@ -24,7 +24,7 @@ public interface MealDAO {
 
 
     @Query("SELECT * FROM favorite_meals WHERE idMeal = :mealId")
-    FavoriteMeal getFavoriteById(String mealId);
+    LiveData<FavoriteMeal> getFavoriteById(String mealId);
 
     // Planned meals
     @Insert

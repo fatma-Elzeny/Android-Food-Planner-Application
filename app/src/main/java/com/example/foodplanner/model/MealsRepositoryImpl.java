@@ -87,10 +87,10 @@ public class MealsRepositoryImpl implements MealsRepository {
     }
 
     @Override
-    public FavoriteMeal getFavoriteById(String id) {
-
+    public LiveData<FavoriteMeal> getFavoriteById(String id) {
         return mealDao.getFavoriteById(id);
     }
+
 
     // ===== Planned Meals =====
 
