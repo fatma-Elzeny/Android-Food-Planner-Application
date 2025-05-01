@@ -45,28 +45,23 @@ import java.util.Locale;
 public class MealDetailsActivity extends AppCompatActivity implements MealDetailsView {
 
     private MealDetailPresenter presenter;
-
     private ImageView mealImage;
     private TextView mealName;
     private TextView mealInstructions;
     private ProgressBar progressBar;
-
     private TextView categoryText, countryText;
-
     private ImageButton btnFavorite;
     private ImageButton btnPlanner;
     private Meal currentMeal;
     private YouTubePlayerView youtubePlayerView;
-
-    RecyclerView ingredientsRecycler;
-
-
-
+    private RecyclerView ingredientsRecycler;
+    private Calendar selectedCalendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_details);
+
         youtubePlayerView = findViewById(R.id.youtube_player_view);
         getLifecycle().addObserver(youtubePlayerView);
         mealImage = findViewById(R.id.meal_image);
@@ -78,7 +73,6 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         btnPlanner = findViewById(R.id.btn_add_planner);
         ingredientsRecycler = findViewById(R.id.ingredients_recycler);
         ingredientsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
 
         String mealId = getIntent().getStringExtra("MEAL_ID");
         presenter = new MealDetailPresenterImpl(this, new MealsRepositoryImpl(this));
@@ -93,7 +87,6 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 fav.setIdMeal(currentMeal.getIdMeal());
                 fav.setStrMeal(currentMeal.getStrMeal());
                 fav.setStrMealThumb(currentMeal.getStrMealThumb());
-
                 new MealsRepositoryImpl(this).insertFavorite(fav);
                 Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
             }
@@ -115,27 +108,20 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         CalendarView calendarView = dialogView.findViewById(R.id.calendar_view);
         Button btnConfirm = dialogView.findViewById(R.id.btn_confirm);
 
-
-        // Get current date
-        Calendar calendar = Calendar.getInstance();
-        long today = calendar.getTimeInMillis();
-
-        // Set min date to today
+        Calendar todayCalendar = Calendar.getInstance();
+        long today = todayCalendar.getTimeInMillis();
         calendarView.setMinDate(today);
-
-        // Set max date to end of current week (6 days from today)
-        calendar.add(Calendar.DAY_OF_YEAR, 6);
-        long maxDate = calendar.getTimeInMillis();
-        calendarView.setMaxDate(maxDate);
-
-        // Set initial selection to today
+        todayCalendar.add(Calendar.DAY_OF_YEAR, 6);
+        calendarView.setMaxDate(todayCalendar.getTimeInMillis());
         calendarView.setDate(today, true, true);
 
-        btnConfirm.setOnClickListener(v -> {
-            long selectedDate = calendarView.getDate();
-            Calendar selectedCalendar = Calendar.getInstance();
-            selectedCalendar.setTimeInMillis(selectedDate);
+        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            selectedCalendar.set(Calendar.YEAR, year);
+            selectedCalendar.set(Calendar.MONTH, month);
+            selectedCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        });
 
+        btnConfirm.setOnClickListener(v -> {
             String dayName = new SimpleDateFormat("EEEE", Locale.getDefault()).format(selectedCalendar.getTime());
             String formattedDate = new SimpleDateFormat("MMM dd", Locale.getDefault()).format(selectedCalendar.getTime());
 
@@ -143,13 +129,11 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 PlannedMeal planned = new PlannedMeal();
                 planned.setMealId(currentMeal.getIdMeal());
                 planned.setMealName(currentMeal.getStrMeal());
+                planned.setMealThumb(currentMeal.getStrMealThumb());
                 planned.setDay(dayName);
                 planned.setDate(formattedDate);
-                planned.setMealThumb(currentMeal.getStrMealThumb());
-
                 new MealsRepositoryImpl(this).insertPlannedMeal(planned);
-                Toast.makeText(this, "Meal planned for " + dayName + " (" + formattedDate + ")",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Meal planned for " + dayName + " (" + formattedDate + ")", Toast.LENGTH_SHORT).show();
             }
 
             dialog.dismiss();
@@ -157,6 +141,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
 
         dialog.show();
     }
+
     @Override
     public void showLoading() {
         progressBar.setVisibility(View.VISIBLE);
@@ -170,7 +155,6 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     @Override
     public void showMealDetails(Meal meal) {
         this.currentMeal = meal;
-
         mealName.setText(meal.getStrMeal());
         mealInstructions.setText(meal.getStrInstructions());
         Glide.with(this).load(meal.getStrMealThumb()).into(mealImage);
@@ -178,11 +162,9 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         categoryText.setText("Category: " + meal.getStrCategory());
         countryText.setText("Country: " + meal.getStrArea());
 
-        // ✅ Use helper method instead of reflection
         List<IngredientItem> ingredientItems = meal.getIngredientItemList();
         ingredientsRecycler.setAdapter(new IngredientAdapter(ingredientItems));
 
-        // ✅ Safe video loading
         String videoId = extractYoutubeVideoId(meal.getStrYoutube());
         if (videoId != null) {
             youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
@@ -194,14 +176,10 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         }
     }
 
-
     private String extractYoutubeVideoId(String url) {
         Uri uri = Uri.parse(url);
         return uri.getQueryParameter("v");
     }
-
-
-
 
     @Override
     public void showError(String message) {

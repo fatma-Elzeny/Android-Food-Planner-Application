@@ -2,12 +2,15 @@ package com.example.foodplanner.planner.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +39,7 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
     private CalendarView calendarView;
     private LottieAnimationView noMealsAnimation;
     private TextView noMealsText;
-
+    private Calendar selectedCalendar = Calendar.getInstance();
     private final SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
 
     @Override
@@ -56,39 +59,48 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
 
         presenter = new PlannerPresenterImpl(this, new MealsRepositoryImpl(this));
 
-        setupCurrentWeekCalendar();
+        // Limit calendar to current week
+        Calendar todayCalendar = Calendar.getInstance();
+        long today = todayCalendar.getTimeInMillis();
+        calendarView.setMinDate(today);
+        todayCalendar.add(Calendar.DAY_OF_YEAR, 6);
+        calendarView.setMaxDate(todayCalendar.getTimeInMillis());
+
+        // Set default date and selected calendar
+        calendarView.setDate(Calendar.getInstance().getTimeInMillis(), true, true);
+        selectedCalendar.setTimeInMillis(calendarView.getDate());
+
+        // Load meals for today by default
+        String todayDay = dayFormat.format(selectedCalendar.getTime());
+        tvSelectedDay.setText("Meals on " + todayDay);
+        presenter.loadMealsForDay(todayDay);
 
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            Calendar selected = Calendar.getInstance();
-            selected.set(year, month, dayOfMonth);
+            selectedCalendar.set(Calendar.YEAR, year);
+            selectedCalendar.set(Calendar.MONTH, month);
+            selectedCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-            if (!isWithinCurrentWeek(selected)) {
+            if (!isWithinCurrentWeek(selectedCalendar)) {
                 Toast.makeText(this, "Only current week is allowed", Toast.LENGTH_SHORT).show();
-                calendarView.setDate(Calendar.getInstance().getTimeInMillis()); // reset to today
+                calendarView.setDate(Calendar.getInstance().getTimeInMillis());
                 return;
             }
 
-            String selectedDay = dayFormat.format(selected.getTime());
+            String selectedDay = dayFormat.format(selectedCalendar.getTime());
             tvSelectedDay.setText("Meals on " + selectedDay);
             presenter.loadMealsForDay(selectedDay);
         });
     }
 
-    private void setupCurrentWeekCalendar() {
-        Calendar calendar = Calendar.getInstance();
-        long today = calendar.getTimeInMillis();
-        calendarView.setMinDate(today);
-
-        calendar.add(Calendar.DAY_OF_YEAR, 6); // up to 6 days from today
-        calendarView.setMaxDate(calendar.getTimeInMillis());
-
-        calendarView.setDate(today, true, true);
-    }
-
     private boolean isWithinCurrentWeek(Calendar date) {
         Calendar now = Calendar.getInstance();
-        return now.get(Calendar.WEEK_OF_YEAR) == date.get(Calendar.WEEK_OF_YEAR) &&
-                now.get(Calendar.YEAR) == date.get(Calendar.YEAR);
+        int currentWeek = now.get(Calendar.WEEK_OF_YEAR);
+        int currentYear = now.get(Calendar.YEAR);
+
+        int selectedWeek = date.get(Calendar.WEEK_OF_YEAR);
+        int selectedYear = date.get(Calendar.YEAR);
+
+        return currentWeek == selectedWeek && currentYear == selectedYear;
     }
 
     @Override
@@ -115,7 +127,22 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
 
     @Override
     public void onDeleteClick(PlannedMeal meal) {
-        presenter.deletePlannedMeal(meal);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_delete_planned, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this).setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        Button btnConfirm = dialogView.findViewById(R.id.btn_confirm);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+
+        btnConfirm.setOnClickListener(v -> {
+            presenter.deletePlannedMeal(meal);
+            dialog.dismiss();
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 }
+
 

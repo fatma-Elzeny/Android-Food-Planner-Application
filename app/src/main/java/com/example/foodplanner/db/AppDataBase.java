@@ -27,7 +27,6 @@ public abstract class AppDataBase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDataBase.class, "food_database")
-                    .fallbackToDestructiveMigration()
                     .build();
         }
         return instance;

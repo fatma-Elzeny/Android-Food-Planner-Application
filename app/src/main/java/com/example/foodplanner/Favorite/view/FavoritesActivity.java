@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -72,7 +73,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
                 .setNegativeButton("Cancel", null)
                 .show();
     }*/
-    private void showLottieDeleteDialog(FavoriteMeal meal) {
+  /*  private void showLottieDeleteDialog(FavoriteMeal meal) {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_delete, null);
 
         AlertDialog dialog = new AlertDialog.Builder(this, R.style.AlertDialogTheme)
@@ -82,7 +83,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
                 .create();
 
         dialog.show();
-    }
+    }*/
 
 
     @Override
@@ -100,8 +101,23 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     }
     @Override
     public void onDeleteClick(FavoriteMeal meal) {
-        showLottieDeleteDialog(meal);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_delete, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this).setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        Button btnConfirm = dialogView.findViewById(R.id.btn_confirm);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel);
+
+        btnConfirm.setOnClickListener(v -> {
+            presenter.deleteMeal(meal);
+            dialog.dismiss();
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
+
     @Override
     public void observeFavorites(LiveData<List<FavoriteMeal>> liveData) {
         liveData.observe(this, meals -> {
