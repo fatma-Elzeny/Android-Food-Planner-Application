@@ -8,5 +8,5 @@ public interface PlannerView {
     void showMeals(List<PlannedMeal> meals);
     void showEmpty();
 
-    void showError(String message);
+
 }

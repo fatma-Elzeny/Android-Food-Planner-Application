@@ -16,7 +16,7 @@
             android:name=".SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".profile.view.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".planner.view.PlannerActivity"

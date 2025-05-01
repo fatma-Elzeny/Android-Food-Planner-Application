@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.planner.view.PlannerActivity;
-import com.example.foodplanner.ProfileActivity;
+import com.example.foodplanner.profile.view.ProfileActivity;
 import com.example.foodplanner.R;
 
 import android.content.Intent;

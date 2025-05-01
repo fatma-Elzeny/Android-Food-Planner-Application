@@ -4,11 +4,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.PlannedMeal;
 
@@ -42,10 +44,11 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.PlannerV
     public void onBindViewHolder(@NonNull PlannerViewHolder holder, int position) {
         PlannedMeal meal = meals.get(position);
         holder.title.setText(meal.getMealName());
-        holder.date.setText(meal.getDate()); // Add this TextView in your ViewHolder
-
         holder.itemView.setOnClickListener(v -> listener.onMealClick(meal));
         holder.btnDelete.setOnClickListener(v -> listener.onDeleteClick(meal));
+        Glide.with(holder.itemView.getContext())
+                .load(meal.getMealThumb())
+                .into(holder.iv_meal_image);
     }
 
     @Override
@@ -55,15 +58,14 @@ public class PlannerAdapter extends RecyclerView.Adapter<PlannerAdapter.PlannerV
 
     static class PlannerViewHolder extends RecyclerView.ViewHolder {
         TextView title;
-        TextView date; // Add this
         ImageButton btnDelete;
 
+        ImageView iv_meal_image ;
         PlannerViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.tv_meal_title);
-            date = itemView.findViewById(R.id.tv_meal_date); // Add this
             btnDelete = itemView.findViewById(R.id.btn_delete);
+            iv_meal_image=itemView.findViewById(R.id.iv_meal_image);
         }
     }
-    }
-
+}

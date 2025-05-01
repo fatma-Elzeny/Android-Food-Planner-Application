@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class PlannerActivity extends AppCompatActivity implements PlannerView ,OnPlannerClickListener{
+public class PlannerActivity extends AppCompatActivity implements PlannerView, OnPlannerClickListener {
 
     private PlannerPresenter presenter;
     private TextView tvSelectedDay;
@@ -35,6 +36,8 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView ,O
     private CalendarView calendarView;
     private LottieAnimationView noMealsAnimation;
     private TextView noMealsText;
+
+    private final SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,41 +54,49 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView ,O
         rvMeals.setLayoutManager(new LinearLayoutManager(this));
         rvMeals.setAdapter(adapter);
 
-
-        rvMeals.setLayoutManager(new LinearLayoutManager(this));
-
         presenter = new PlannerPresenterImpl(this, new MealsRepositoryImpl(this));
-        Calendar calendar = Calendar.getInstance();
-        calendarView.setMinDate(calendar.getTimeInMillis());
-        calendar.add(Calendar.DAY_OF_YEAR, 6);
-        calendarView.setMaxDate(calendar.getTimeInMillis());
-        calendarView.setDate(Calendar.getInstance().getTimeInMillis(), true, true);
 
-        // Load today's meals by default
-        String today = new SimpleDateFormat("EEEE", Locale.getDefault()).format(Calendar.getInstance().getTime());
-        tvSelectedDay.setText("Meals for " + today);
-        presenter.loadMealsForDay(today);
+        setupCurrentWeekCalendar();
 
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             Calendar selected = Calendar.getInstance();
             selected.set(year, month, dayOfMonth);
-            String selectedDay = new SimpleDateFormat("EEEE", Locale.getDefault()).format(selected.getTime());
-            tvSelectedDay.setText("Meals for " + selectedDay);
+
+            if (!isWithinCurrentWeek(selected)) {
+                Toast.makeText(this, "Only current week is allowed", Toast.LENGTH_SHORT).show();
+                calendarView.setDate(Calendar.getInstance().getTimeInMillis()); // reset to today
+                return;
+            }
+
+            String selectedDay = dayFormat.format(selected.getTime());
+            tvSelectedDay.setText("Meals on " + selectedDay);
             presenter.loadMealsForDay(selectedDay);
         });
+    }
 
+    private void setupCurrentWeekCalendar() {
+        Calendar calendar = Calendar.getInstance();
+        long today = calendar.getTimeInMillis();
+        calendarView.setMinDate(today);
+
+        calendar.add(Calendar.DAY_OF_YEAR, 6); // up to 6 days from today
+        calendarView.setMaxDate(calendar.getTimeInMillis());
+
+        calendarView.setDate(today, true, true);
+    }
+
+    private boolean isWithinCurrentWeek(Calendar date) {
+        Calendar now = Calendar.getInstance();
+        return now.get(Calendar.WEEK_OF_YEAR) == date.get(Calendar.WEEK_OF_YEAR) &&
+                now.get(Calendar.YEAR) == date.get(Calendar.YEAR);
     }
 
     @Override
     public void showMeals(List<PlannedMeal> meals) {
-        if (meals.isEmpty()) {
-            showEmpty();
-        } else {
-            rvMeals.setVisibility(View.VISIBLE);
-            noMealsAnimation.setVisibility(View.GONE);
-            noMealsText.setVisibility(View.GONE);
-            adapter.updateMeals(meals);
-        }
+        rvMeals.setVisibility(View.VISIBLE);
+        noMealsAnimation.setVisibility(View.GONE);
+        noMealsText.setVisibility(View.GONE);
+        adapter.updateMeals(meals);
     }
 
     @Override
@@ -94,6 +105,7 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView ,O
         noMealsAnimation.setVisibility(View.VISIBLE);
         noMealsText.setVisibility(View.VISIBLE);
     }
+
     @Override
     public void onMealClick(PlannedMeal meal) {
         Intent intent = new Intent(this, MealDetailsActivity.class);
@@ -105,28 +117,5 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView ,O
     public void onDeleteClick(PlannedMeal meal) {
         presenter.deletePlannedMeal(meal);
     }
-
-    @Override
-    public void showError(String message) {
-        runOnUiThread(() -> {
-            // Hide loading indicators if visible
-            progressBar.setVisibility(View.GONE);
-
-            // Show error message to user
-            Snackbar snackbar = Snackbar.make(
-                    findViewById(android.R.id.content),
-                    message,
-                    Snackbar.LENGTH_LONG
-            );
-
-            // Optional: Add action button to retry
-            snackbar.setAction("Retry", v -> {
-                String currentDay = tvSelectedDay.getText().toString()
-                        .replace("Meals for ", "");
-                presenter.loadMealsForDay(currentDay);
-            });
-
-            snackbar.show();
-        });
-    }
 }
+

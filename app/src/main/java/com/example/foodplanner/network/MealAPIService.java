@@ -28,4 +28,5 @@ public interface MealAPIService {
 
     @GET("list.php?a=list")
     Call<MealResponse> getAllCountries();
+
 }

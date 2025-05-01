@@ -2,6 +2,8 @@ package com.example.foodplanner.network;
 
 import androidx.annotation.NonNull;
 
+import com.example.foodplanner.model.CategoryResponse;
+import com.example.foodplanner.model.CountryResponse;
 import com.example.foodplanner.model.MealResponse;
 
 import java.lang.reflect.InvocationTargetException;
@@ -96,4 +98,3 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
         };
     }
 }
-

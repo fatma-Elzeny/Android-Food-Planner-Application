@@ -115,6 +115,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         CalendarView calendarView = dialogView.findViewById(R.id.calendar_view);
         Button btnConfirm = dialogView.findViewById(R.id.btn_confirm);
 
+
         // Get current date
         Calendar calendar = Calendar.getInstance();
         long today = calendar.getTimeInMillis();
@@ -143,7 +144,8 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 planned.setMealId(currentMeal.getIdMeal());
                 planned.setMealName(currentMeal.getStrMeal());
                 planned.setDay(dayName);
-                planned.setDate(formattedDate); // Add this field to your PlannedMeal model
+                planned.setDate(formattedDate);
+                planned.setMealThumb(currentMeal.getStrMealThumb());
 
                 new MealsRepositoryImpl(this).insertPlannedMeal(planned);
                 Toast.makeText(this, "Meal planned for " + dayName + " (" + formattedDate + ")",
