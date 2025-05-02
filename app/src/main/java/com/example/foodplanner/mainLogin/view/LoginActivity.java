@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.foodplanner.AuthLogin.view.AuthLoginActivity;
 import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.R;
 import com.example.foodplanner.SignUP.view.SignUpActivity;
@@ -53,6 +54,8 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
     private FirebaseAuth firebaseAuth;
 
     private TextView btnLogin ;
+    private CallbackManager callbackManager;
+
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -96,7 +99,8 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
 
        facebookBtn.setPermissions("email", "public_profile");
 
-        CallbackManager callbackManager = CallbackManager.Factory.create();
+        callbackManager = CallbackManager.Factory.create();
+
         facebookBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -140,21 +144,8 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
     }
 
     private void loginUser() {
-        //String email = editEmail.getText().toString();
-       // String password = editPassword.getText().toString();
 
-       //  if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-       //  Toast.makeText(this, "Email and Password required", Toast.LENGTH_SHORT).show();
-        //    return;
-        //}
-
-      //  firebaseAuth.signInWithEmailAndPassword(email, password)
-             //   .addOnSuccessListener(authResult -> {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                   // finish();
-                //})
-             //   .addOnFailureListener(e ->
-                    //    Toast.makeText(LoginActivity.this, "Login Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    startActivity(new Intent(LoginActivity.this, AuthLoginActivity.class));
     }
     private void gotoMain() {
         startActivity(new Intent(this, MainActivity.class));
@@ -178,7 +169,13 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
                 Toast.makeText(this, "Google Sign-In Failed", Toast.LENGTH_SHORT).show();
             }
         }
+
+        // ✅ Add this line to handle Facebook login callback properly
+        if (callbackManager != null) {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
     }
+
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
