@@ -12,9 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodPlanner"
         tools:targetApi="31">
-        <activity
-            android:name=".SearchActivity"
-            android:exported="false" />
+
         <activity
             android:name=".AuthLogin.view.AuthLoginActivity"
             android:exported="false" />

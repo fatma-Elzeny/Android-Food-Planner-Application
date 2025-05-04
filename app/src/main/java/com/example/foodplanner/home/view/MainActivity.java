@@ -6,10 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
-import com.example.foodplanner.SearchActivity;
 import com.example.foodplanner.db.MealsLocalDataSourceImpl;
-import com.example.foodplanner.model.Category;
-import com.example.foodplanner.network.MealsRemoteDataSource;
 import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.example.foodplanner.planner.view.PlannerActivity;
 import com.example.foodplanner.profile.view.ProfileActivity;
@@ -28,9 +25,9 @@ import com.example.foodplanner.home.presenter.HomePresenterImpl;
 import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepository;
 import com.example.foodplanner.model.MealsRepositoryImpl;
+import com.example.foodplanner.search.view.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements HomeView,OnMealClickListener {

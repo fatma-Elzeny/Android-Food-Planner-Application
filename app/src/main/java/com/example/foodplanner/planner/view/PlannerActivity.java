@@ -20,7 +20,6 @@ import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.R;
 
-import com.example.foodplanner.SearchActivity;
 import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.model.MealsRepositoryImpl;
@@ -29,6 +28,7 @@ import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.example.foodplanner.planner.presenter.PlannerPresenter;
 import com.example.foodplanner.planner.presenter.PlannerPresenterImpl;
 import com.example.foodplanner.profile.view.ProfileActivity;
+import com.example.foodplanner.search.view.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
