@@ -7,7 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.SearchActivity;
+import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.model.Category;
+import com.example.foodplanner.network.MealsRemoteDataSource;
+import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.example.foodplanner.planner.view.PlannerActivity;
 import com.example.foodplanner.profile.view.ProfileActivity;
 import com.example.foodplanner.R;
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         lazyMealsRecycler = findViewById(R.id.lazyMealsRecycler);
         progressBar = findViewById(R.id.progressBarMain);
         lazyMealsTitle=findViewById(R.id.lazyMealsTitle);
-        MealsRepository repository = new MealsRepositoryImpl(this);
+        MealsRepository repository = new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this));
         presenter = new HomePresenterImpl(this, repository);
 
         adapter = new LazyMealAdapter(this, this);
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         lazyMealsRecycler.setAdapter(adapter);
 
         presenter.getMealOfTheDay();
-        presenter.getMealsByCategory("Beef");
+
 
         String preferredCategory = getIntent().getStringExtra("CATEGORY_PREF");
 

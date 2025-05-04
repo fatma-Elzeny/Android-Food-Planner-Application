@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +21,11 @@ import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.R;
 
 import com.example.foodplanner.SearchActivity;
+import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.example.foodplanner.model.PlannedMeal;
+import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.example.foodplanner.planner.presenter.PlannerPresenter;
 import com.example.foodplanner.planner.presenter.PlannerPresenterImpl;
 import com.example.foodplanner.profile.view.ProfileActivity;
@@ -85,7 +88,7 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
             return false;
         });
 
-        presenter = new PlannerPresenterImpl(this, new MealsRepositoryImpl(this));
+        presenter = new PlannerPresenterImpl(this, new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)));
 
         // Limit calendar to current week
         Calendar minDateCalendar = Calendar.getInstance();
@@ -111,8 +114,11 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
             selectedCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
             if (!isWithinCurrentWeek(selectedCalendar)) {
-                Toast.makeText(this, "Only current week is allowed", Toast.LENGTH_SHORT).show();
-                calendarView.setDate(Calendar.getInstance().getTimeInMillis());
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Only current week is allowed", Toast.LENGTH_SHORT).show();
+                    // Reset to today's date
+                    calendarView.setDate(System.currentTimeMillis());
+                });
                 return;
             }
 
@@ -120,6 +126,7 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
             tvSelectedDay.setText("Meals on " + selectedDay);
             presenter.loadMealsForDay(selectedDay);
         });
+
     }
 
     private boolean isWithinCurrentWeek(Calendar date) {
@@ -134,18 +141,31 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
     }
 
     @Override
-    public void showMeals(List<PlannedMeal> meals) {
-        rvMeals.setVisibility(View.VISIBLE);
-        noMealsAnimation.setVisibility(View.GONE);
-        noMealsText.setVisibility(View.GONE);
-        adapter.updateMeals(meals);
+    public void showMeals(LiveData<List<PlannedMeal>> mealsLiveData) {
+        mealsLiveData.observe(this, meals -> {
+            rvMeals.setVisibility(View.VISIBLE);
+            noMealsAnimation.setVisibility(View.GONE);
+            noMealsText.setVisibility(View.GONE);
+            adapter.updateMeals(meals);
+        });
     }
+
 
     @Override
     public void showEmpty() {
-        rvMeals.setVisibility(View.GONE);
-        noMealsAnimation.setVisibility(View.VISIBLE);
-        noMealsText.setVisibility(View.VISIBLE);
+        runOnUiThread(() -> {
+            rvMeals.setVisibility(View.GONE);
+            noMealsAnimation.setVisibility(View.VISIBLE);
+            noMealsText.setVisibility(View.VISIBLE);
+
+            // Make sure to play the animation
+            if (noMealsAnimation.getProgress() == 0f) {
+                noMealsAnimation.playAnimation();
+            } else {
+                noMealsAnimation.setProgress(0f);
+                noMealsAnimation.playAnimation();
+            }
+        });
     }
 
     @Override
@@ -172,6 +192,11 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
         btnCancel.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
+    }
+
+    @Override
+    public void showError(String message) {
+        runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
     }
 }
 

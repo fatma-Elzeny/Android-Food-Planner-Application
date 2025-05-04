@@ -24,9 +24,10 @@ public class HomePresenterImpl implements HomePresenter {
             @Override
             public void onSuccess(MealResponse data) {
                 view.hideLoading();
-                MealResponse mealResponse =  data;
-                if (!mealResponse.getMeals().isEmpty()) {
-                    view.showSuggestedMeal(mealResponse.getMeals().get(0));
+                if (data != null && data.getMeals() != null && !data.getMeals().isEmpty()) {  // ✅ Null check added
+                    view.showSuggestedMeal(data.getMeals().get(0));
+                } else {
+                    view.showError("No meal of the day available."); // ✅ Added fallback error
                 }
             }
 

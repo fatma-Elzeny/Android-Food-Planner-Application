@@ -3,9 +3,10 @@ package com.example.foodplanner.planner.presenter;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.foodplanner.model.MealsRepository;
 import com.example.foodplanner.model.PlannedMeal;
-import com.example.foodplanner.network.NetworkCallback;
 import com.example.foodplanner.planner.view.PlannerView;
 
 import java.util.List;
@@ -21,17 +22,18 @@ public class PlannerPresenterImpl implements PlannerPresenter {
     }
 
     @Override
-    public void loadMealsForDay(String day) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            List<PlannedMeal> meals = repository.getMealsByDay(day);
+    public LiveData<List<PlannedMeal>> loadMealsForDay(String day) {
+        LiveData<List<PlannedMeal>> meals = repository.getMealsByDay(day);
+        meals.observeForever(newMeals -> {
             new Handler(Looper.getMainLooper()).post(() -> {
-                if (meals == null || meals.isEmpty()) {
+                if (newMeals == null || newMeals.isEmpty()) {
                     view.showEmpty();
                 } else {
                     view.showMeals(meals);
                 }
             });
         });
+        return meals;
     }
 
     @Override

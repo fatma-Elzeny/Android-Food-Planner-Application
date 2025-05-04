@@ -27,10 +27,13 @@ import com.example.foodplanner.MealDetail.presenter.MealDetailPresenter;
 import com.example.foodplanner.MealDetail.presenter.MealDetailPresenterImpl;
 import com.example.foodplanner.R;
 import com.example.foodplanner.Utils;
+import com.example.foodplanner.db.MealsLocalDataSource;
+import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.model.FavoriteMeal;
 import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.example.foodplanner.model.PlannedMeal;
+import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -75,7 +78,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         ingredientsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         String mealId = getIntent().getStringExtra("MEAL_ID");
-        presenter = new MealDetailPresenterImpl(this, new MealsRepositoryImpl(this));
+        presenter = new MealDetailPresenterImpl(this, new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)));
         presenter.getMealDetails(mealId);
 
         btnFavorite = findViewById(R.id.btn_add_favorite);
@@ -87,7 +90,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 fav.setIdMeal(currentMeal.getIdMeal());
                 fav.setStrMeal(currentMeal.getStrMeal());
                 fav.setStrMealThumb(currentMeal.getStrMealThumb());
-                new MealsRepositoryImpl(this).insertFavorite(fav);
+                new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)).insertFavorite(fav);
                 Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
             }
         });
@@ -132,7 +135,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 planned.setMealThumb(currentMeal.getStrMealThumb());
                 planned.setDay(dayName);
                 planned.setDate(formattedDate);
-                new MealsRepositoryImpl(this).insertPlannedMeal(planned);
+                new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)).insertPlannedMeal(planned);
                 Toast.makeText(this, "Meal planned for " + dayName + " (" + formattedDate + ")", Toast.LENGTH_SHORT).show();
             }
 

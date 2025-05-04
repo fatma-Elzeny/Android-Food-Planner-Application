@@ -1,76 +1,78 @@
 package com.example.foodplanner.model;
 
-import android.content.Context;
-
-import com.example.foodplanner.db.AppDataBase;
-import com.example.foodplanner.db.MealDAO;
-
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.foodplanner.db.MealsLocalDataSource;
 import com.example.foodplanner.network.MealsRemoteDataSource;
-import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.example.foodplanner.network.NetworkCallback;
 
 public class MealsRepositoryImpl implements MealsRepository {
-    private final MealDAO mealDao;
-    private final Executor executor;
 
-    private final MealsRemoteDataSource remoteDataSource;
+    MealsRemoteDataSource mealRemoteDataSource;
+    MealsLocalDataSource mealLocalDataSource;
 
-    public MealsRepositoryImpl(Context context) {
-        AppDataBase db = AppDataBase.getInstance(context);
-        mealDao = db.mealDao();
-        remoteDataSource = MealsRemoteDataSourceImpl.getInstance();
-        executor = Executors.newSingleThreadExecutor();
+    private static MealsRepositoryImpl mealRepo =null;
+
+    public static MealsRepositoryImpl getInstance(MealsRemoteDataSource mealRemoteDataSource,MealsLocalDataSource mealLocalDataSource)
+    {
+        if(mealRepo ==null)
+        {
+            mealRepo =new MealsRepositoryImpl(mealRemoteDataSource,mealLocalDataSource);
+        }
+        return mealRepo;
+    }
+
+    public MealsRepositoryImpl(MealsRemoteDataSource mealRemoteDataSource,MealsLocalDataSource mealLocalDataSource)
+    {
+        this.mealRemoteDataSource = mealRemoteDataSource;
+        this.mealLocalDataSource=mealLocalDataSource;
     }
 
     @Override
     public void getMealOfTheDay(NetworkCallback<MealResponse> callback) {
-        remoteDataSource.getMealOfTheDay(callback);
+        mealRemoteDataSource.getMealOfTheDay(callback);
     }
 
     @Override
     public void searchMealsByName(String name, NetworkCallback<MealResponse> callback) {
-        remoteDataSource.searchMealsByName(name, callback);
+        mealRemoteDataSource.searchMealsByName(name, callback);
     }
 
     @Override
     public void getMealsByCategory(String category, NetworkCallback<MealResponse> callback) {
-        remoteDataSource.getMealsByCategory(category, callback);
+        mealRemoteDataSource.getMealsByCategory(category, callback);
     }
 
     @Override
     public void getMealsByIngredient(String ingredient, NetworkCallback<MealResponse> callback) {
-        remoteDataSource.getMealsByIngredient(ingredient, callback);
+        mealRemoteDataSource.getMealsByIngredient(ingredient, callback);
     }
 
     @Override
     public void getMealsByCountry(String country, NetworkCallback<MealResponse> callback) {
-        remoteDataSource.getMealsByCountry(country, callback);
+        mealRemoteDataSource.getMealsByCountry(country, callback);
     }
 
     @Override
     public void getMealDetails(String mealId, NetworkCallback<MealResponse> callback) {
-        remoteDataSource.getMealDetails(mealId, callback);
+        mealRemoteDataSource.getMealDetails(mealId, callback);
     }
 
     @Override
     public void getAllCategories(NetworkCallback<CategoryResponse> callback) {
-        remoteDataSource.getAllCategories(callback);
+        mealRemoteDataSource.getAllCategories(callback);
     }
 
     @Override
     public void getAllIngredients(NetworkCallback<IngredientResponse> callback) {
-        remoteDataSource.getAllIngredients(callback);
+        mealRemoteDataSource.getAllIngredients(callback);
     }
 
     @Override
     public void getAllCountries(NetworkCallback<CountryResponse> callback) {
-        remoteDataSource.getAllCountries(callback);
+        mealRemoteDataSource.getAllCountries(callback);
     }
 
 
@@ -79,45 +81,42 @@ public class MealsRepositoryImpl implements MealsRepository {
 
     @Override
     public void insertFavorite(FavoriteMeal meal) {
-        executor.execute(() -> mealDao.insertFavorite(meal));
+       mealLocalDataSource.insertMeal(meal);
     }
 
     @Override
     public void deleteFavorite(FavoriteMeal meal) {
-        executor.execute(() -> mealDao.deleteFavorite(meal));
+       mealLocalDataSource.deleteMeal(meal);
     }
 
     @Override
     public LiveData<List<FavoriteMeal>> getAllFavorites() {
-        return mealDao.getAllFavorites();
+      return   mealLocalDataSource.getAllFavorites();
     }
 
-    @Override
-    public LiveData<FavoriteMeal> getFavoriteById(String id) {
-        return mealDao.getFavoriteById(id);
-    }
 
 
     // ===== Planned Meals =====
 
     @Override
     public void insertPlannedMeal(PlannedMeal meal) {
-        executor.execute(() -> mealDao.insertPlanned(meal));
+       mealLocalDataSource.insertFoodPlan(meal);
     }
 
     @Override
     public void deletePlannedMeal(PlannedMeal meal) {
-        executor.execute(() -> mealDao.deletePlanned(meal));
+        mealLocalDataSource.deleteFoodPlan(meal);
     }
 
     @Override
-    public List<PlannedMeal> getMealsByDay(String day) {
+    public LiveData<List<PlannedMeal>> getMealsByDay(String day) {
         // Optional: should also be exposed via LiveData for UI safety
-        return mealDao.getMealsByDay(day);
+      return  mealLocalDataSource.getPlannedFood(day);
+    }
+    @Override
+    public void updatePlannedMeal(PlannedMeal plannedMeal) {
+        mealLocalDataSource.updateFoodPlan(plannedMeal);
+
     }
 
-    @Override
-    public List<PlannedMeal> getAllPlannedMeals() {
-        return mealDao.getAllPlannedMeals();
-    }
 }

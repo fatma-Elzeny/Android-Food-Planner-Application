@@ -23,9 +23,12 @@ import com.example.foodplanner.Favorite.presenter.Favpresenter;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.R;
 import com.example.foodplanner.SearchActivity;
+import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.model.FavoriteMeal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
+import com.example.foodplanner.network.MealsRemoteDataSource;
+import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.example.foodplanner.planner.view.PlannerActivity;
 import com.example.foodplanner.profile.view.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -52,7 +55,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         adapter = new FavoritesAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        presenter = new FavPresenterImpl(this, new MealsRepositoryImpl(this));
+        presenter = new FavPresenterImpl(this, new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)));
         presenter.getFavoriteMeals();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_favorites);

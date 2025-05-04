@@ -1,68 +1,104 @@
 package com.example.foodplanner.db;
 
 import android.content.Context;
+import android.util.Log;
+
+import androidx.lifecycle.LiveData;
 
 import com.example.foodplanner.model.FavoriteMeal;
+import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.PlannedMeal;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     private FavoriteMealDao favoriteMealDao;
     private PlannedMealDao plannedMealDao;
-    private Executor executor;
+    private static MealsLocalDataSource mealLocalDataSource=null;
+    private LiveData<List<FavoriteMeal>> storedMeals;
+
+    private LiveData<List<Meal>> plannedMeals;
 
     public MealsLocalDataSourceImpl(Context context) {
-        AppDataBase db = AppDataBase.getInstance(context);
+
+        AppDataBase db =AppDataBase.getInstance(context.getApplicationContext());
         favoriteMealDao = db.favoriteMealDao();
         plannedMealDao = db.plannedMealDao();
-        executor = Executors.newSingleThreadExecutor();
+        storedMeals=favoriteMealDao.getAllFavorites();
     }
 
-    // --------- Favorites ---------
-
-    @Override
-    public void insertFavorite(FavoriteMeal meal) {
-        executor.execute(() -> favoriteMealDao.insertFavoriteMeal(meal));
-    }
-
-    @Override
-    public void deleteFavorite(FavoriteMeal meal) {
-        executor.execute(() -> favoriteMealDao.deleteFavoriteMeal(meal));
+    public  static MealsLocalDataSource getInstance(Context context)
+    {
+        if(mealLocalDataSource==null)
+        {
+            mealLocalDataSource=new MealsLocalDataSourceImpl(context);
+        }
+        return mealLocalDataSource;
     }
 
     @Override
-    public FavoriteMeal getFavoriteById(String id) {
-        return favoriteMealDao.getFavoriteById(id);
+    public LiveData<List<FavoriteMeal>> getAllFavorites() {
+        return storedMeals;
     }
 
     @Override
-    public List<FavoriteMeal> getAllFavorites() {
-        return (List<FavoriteMeal>) favoriteMealDao.getAllFavorites();
-    }
+    public void insertMeal(FavoriteMeal meal) {
 
-    // --------- Planned Meals ---------
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                favoriteMealDao.insertFavoriteMeal(meal);
+                Log.i("MealInsert", "Inserted meal: " + meal.getStrMeal());
 
-    @Override
-    public void insertPlannedMeal(PlannedMeal meal) {
-        executor.execute(() -> plannedMealDao.insertPlannedMeal(meal));
-    }
-
-    @Override
-    public void deletePlannedMeal(PlannedMeal meal) {
-        executor.execute(() -> plannedMealDao.deletePlannedMeal(meal));
+            }
+        }.start();
     }
 
     @Override
-    public List<PlannedMeal> getMealsByDay(String day) {
-        return plannedMealDao.getMealsByDay(day);
+    public void deleteMeal(FavoriteMeal meal) {
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                favoriteMealDao.deleteFavoriteMeal(meal);
+            }
+        }.start();
     }
 
     @Override
-    public List<PlannedMeal> getAllPlannedMeals() {
-        return plannedMealDao.getAllPlannedMeals();
+    public LiveData<List<PlannedMeal>> getPlannedFood(String date) {
+        return plannedMealDao.getMealsByDay(date);
+    }
+
+    @Override
+    public void insertFoodPlan( PlannedMeal plannedMeal) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                plannedMealDao.insertPlannedMeal(plannedMeal);
+            }
+        }).start();
+    }
+
+    @Override
+    public void deleteFoodPlan(PlannedMeal plannedMeal) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                plannedMealDao.deletePlannedMeal(plannedMeal);
+            }
+        }).start();
+
+    }
+
+    @Override
+    public void updateFoodPlan(PlannedMeal plannedMeal) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                plannedMealDao.updatePlannedMeals(plannedMeal);
+            }
+        }).start();
     }
 }

@@ -32,13 +32,14 @@ public interface MealsRepository {
 
     LiveData<List<FavoriteMeal>> getAllFavorites();
 
-    LiveData<FavoriteMeal> getFavoriteById(String id);
+
 
     void insertPlannedMeal(PlannedMeal meal);
 
     void deletePlannedMeal(PlannedMeal meal);
 
-    List<PlannedMeal> getMealsByDay(String day);
+    LiveData<List<PlannedMeal>> getMealsByDay(String day);
 
-    List<PlannedMeal> getAllPlannedMeals();
+
+    void updatePlannedMeal(PlannedMeal plannedMeal);
 }

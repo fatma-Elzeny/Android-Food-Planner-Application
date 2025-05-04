@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.foodplanner.model.FavoriteMeal;
 import com.example.foodplanner.model.PlannedMeal;
@@ -14,30 +15,29 @@ import java.util.List;
 public interface MealDAO {
     // Favorite meals
     @Insert
-    void insertFavorite(FavoriteMeal meal);
+    void insertFavoriteMeal(FavoriteMeal meal);
 
     @Delete
-    void deleteFavorite(FavoriteMeal meal);
+    void deleteFavoriteMeal(FavoriteMeal meal);
 
     @Query("SELECT * FROM favorite_meals")
-    LiveData<List<FavoriteMeal>> getAllFavorites(); // ✅ works with Room + LiveData
-
-
-    @Query("SELECT * FROM favorite_meals WHERE idMeal = :mealId")
-    LiveData<FavoriteMeal> getFavoriteById(String mealId);
+    LiveData<List<FavoriteMeal>> getAllFavorites();
 
     // Planned meals
     @Insert
-    void insertPlanned(PlannedMeal meal);
+    void insertPlannedMeal(PlannedMeal meal);
 
     @Delete
-    void deletePlanned(PlannedMeal meal);
+    void deletePlannedMeal(PlannedMeal meal);
 
     @Query("SELECT * FROM planned_meals WHERE day = :day")
-    List<PlannedMeal> getMealsByDay(String day);
+    LiveData<List<PlannedMeal>>getMealsByDay(String day);
 
     @Query("SELECT * FROM planned_meals")
     List<PlannedMeal> getAllPlannedMeals();
+
+    @Update
+    void updatePlannedMeals(PlannedMeal plannedMeal);
 
 
 
