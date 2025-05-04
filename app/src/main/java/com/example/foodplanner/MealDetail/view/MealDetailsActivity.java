@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.example.foodplanner.MealDetail.model.IngredientItem;
 import com.example.foodplanner.MealDetail.presenter.MealDetailPresenter;
 import com.example.foodplanner.MealDetail.presenter.MealDetailPresenterImpl;
+import com.example.foodplanner.NetworkUtil;
 import com.example.foodplanner.R;
 import com.example.foodplanner.Utils;
 import com.example.foodplanner.db.MealsLocalDataSource;
@@ -52,7 +53,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     private TextView mealName;
     private TextView mealInstructions;
     private ProgressBar progressBar;
-    private TextView categoryText, countryText;
+    private TextView categoryText, countryText ,watchonYTB;
     private ImageButton btnFavorite;
     private ImageButton btnPlanner;
     private Meal currentMeal;
@@ -74,6 +75,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         categoryText = findViewById(R.id.meal_category);
         countryText = findViewById(R.id.meal_country);
         btnPlanner = findViewById(R.id.btn_add_planner);
+        watchonYTB=findViewById(R.id.watchonYTB);
         ingredientsRecycler = findViewById(R.id.ingredients_recycler);
         ingredientsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -100,6 +102,14 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 showPlannerCalendarDialog();
             }
         });
+
+        if (!NetworkUtil.isOnline(this)) {
+            // Hide YouTube Button or make it non-clickable
+            youtubePlayerView.setVisibility(View.GONE);
+            watchonYTB.setText("To Watch YouTube Vedio , Connect to the internet");
+            // Optionally show a toast or a disabled message
+        }
+
     }
 
     private void showPlannerCalendarDialog() {

@@ -118,13 +118,14 @@
 
     <!-- YouTube Section -->
     <TextView
+        android:id="@+id/watchonYTB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="16dp"
         android:text="Watch on YouTube"
-        android:textSize="18sp"
-        android:textStyle="bold"
         android:textColor="@color/purple_accent"
-        android:paddingTop="16dp" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
 
     <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView

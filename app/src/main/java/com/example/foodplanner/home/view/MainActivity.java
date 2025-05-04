@@ -2,17 +2,24 @@ package com.example.foodplanner.home.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
+import com.example.foodplanner.NetworkUtil;
+import com.example.foodplanner.NoInternetDialog;
+import com.example.foodplanner.UserSessionManager;
 import com.example.foodplanner.db.MealsLocalDataSourceImpl;
+import com.example.foodplanner.mainLogin.view.LoginActivity;
 import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.example.foodplanner.planner.view.PlannerActivity;
 import com.example.foodplanner.profile.view.ProfileActivity;
 import com.example.foodplanner.R;
 
 import android.content.Intent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 
@@ -27,11 +34,11 @@ import com.example.foodplanner.model.MealsRepository;
 import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.example.foodplanner.search.view.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements HomeView,OnMealClickListener {
-
     private HomePresenter presenter;
     private ImageView mealImage;
     private TextView mealName, mealInstructions ,lazyMealsTitle;
@@ -58,7 +65,10 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         adapter = new LazyMealAdapter(this, this);
         lazyMealsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         lazyMealsRecycler.setAdapter(adapter);
-
+        if (!NetworkUtil.isOnline(this)) {
+            NoInternetDialog.show(this);
+            return; // Skip calling Presenter/Remote
+        }
         presenter.getMealOfTheDay();
 
 
@@ -146,3 +156,6 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     }
 
 }
+
+
+
