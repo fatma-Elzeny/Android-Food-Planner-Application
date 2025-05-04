@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
+import com.example.foodplanner.SearchActivity;
+import com.example.foodplanner.model.Category;
 import com.example.foodplanner.planner.view.PlannerActivity;
 import com.example.foodplanner.profile.view.ProfileActivity;
 import com.example.foodplanner.R;
@@ -17,7 +19,7 @@ import android.widget.*;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import com.example.foodplanner.SearchActivity;
+
 import com.example.foodplanner.home.presenter.HomePresenter;
 import com.example.foodplanner.home.presenter.HomePresenterImpl;
 import com.example.foodplanner.model.Meal;
@@ -25,13 +27,14 @@ import com.example.foodplanner.model.MealsRepository;
 import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements HomeView,OnMealClickListener {
 
     private HomePresenter presenter;
     private ImageView mealImage;
-    private TextView mealName, mealInstructions;
+    private TextView mealName, mealInstructions ,lazyMealsTitle;
     private RecyclerView lazyMealsRecycler;
     private ProgressBar progressBar;
     private LazyMealAdapter adapter;
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         mealInstructions = findViewById(R.id.mealInstructions);
         lazyMealsRecycler = findViewById(R.id.lazyMealsRecycler);
         progressBar = findViewById(R.id.progressBarMain);
-
+        lazyMealsTitle=findViewById(R.id.lazyMealsTitle);
         MealsRepository repository = new MealsRepositoryImpl(this);
         presenter = new HomePresenterImpl(this, repository);
 
@@ -58,6 +61,15 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
 
         presenter.getMealOfTheDay();
         presenter.getMealsByCategory("Beef");
+
+        String preferredCategory = getIntent().getStringExtra("CATEGORY_PREF");
+
+        if (preferredCategory == null || preferredCategory.isEmpty()) {
+            preferredCategory = "Beef"; // 🟣 Default category if not set (e.g., guest or Google)
+        }
+
+        presenter.loadMealsByCategory(preferredCategory);
+        lazyMealsTitle.setText("Meals for " + preferredCategory);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -128,4 +140,9 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         super.onDestroy();
         presenter.onDestroy();
     }
+    @Override
+    public void showMealsByCategory(String category, List<Meal> meals) {
+        adapter.setMeals(meals);
+    }
+
 }

@@ -5,4 +5,7 @@ public interface HomePresenter {
     void getMealOfTheDay();
     void getMealsByCategory(String category);
     void onDestroy();
+
+    void loadMealsByCategory(String category);
+
 }

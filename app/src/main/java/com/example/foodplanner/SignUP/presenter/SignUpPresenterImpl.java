@@ -44,7 +44,7 @@ public class SignUpPresenterImpl implements SignUpPresenter{
 
                             user.updateProfile(profileUpdates).addOnCompleteListener(profileTask -> {
                                 if (profileTask.isSuccessful()) {
-                                    view.showSignUpSuccess(userName);
+                                    view.showSignUpSuccess(userName,foodPref);
                                 } else {
                                     view.showSignUpError("Failed to update user profile");
                                 }

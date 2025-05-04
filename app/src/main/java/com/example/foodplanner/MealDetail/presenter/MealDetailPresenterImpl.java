@@ -20,11 +20,11 @@ public class MealDetailPresenterImpl implements MealDetailPresenter {
     @Override
     public void getMealDetails(String mealId) {
         view.showLoading();
-        repository.getMealDetails(mealId, new NetworkCallback<Object>() {
+        repository.getMealDetails(mealId, new NetworkCallback<MealResponse>() {
             @Override
-            public void onSuccess(Object data) {
+            public void onSuccess(MealResponse data) {
                 view.hideLoading();
-                MealResponse response = (MealResponse) data;
+                MealResponse response = data;
                 if (response.getMeals() != null && !response.getMeals().isEmpty()) {
                     view.showMealDetails(response.getMeals().get(0));
                 } else {

@@ -8,26 +8,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.foodplanner.ConnectionLiveData;
 import com.example.foodplanner.Favorite.presenter.FavPresenterImpl;
 import com.example.foodplanner.Favorite.presenter.Favpresenter;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
-import com.example.foodplanner.NoInternetDialog;
 import com.example.foodplanner.R;
 import com.example.foodplanner.SearchActivity;
 import com.example.foodplanner.home.view.MainActivity;
@@ -36,7 +29,6 @@ import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.example.foodplanner.planner.view.PlannerActivity;
 import com.example.foodplanner.profile.view.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 

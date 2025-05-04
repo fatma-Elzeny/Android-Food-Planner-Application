@@ -1,12 +1,9 @@
 package com.example.foodplanner.network;
 
-import androidx.annotation.NonNull;
-
 import com.example.foodplanner.model.CategoryResponse;
 import com.example.foodplanner.model.CountryResponse;
+import com.example.foodplanner.model.IngredientResponse;
 import com.example.foodplanner.model.MealResponse;
-
-import java.lang.reflect.InvocationTargetException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,62 +36,68 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
     }
 
     @Override
-    public void getMealOfTheDay(NetworkCallback<Object> callback) {
+    public void getMealOfTheDay(NetworkCallback<MealResponse> callback) {
         mealAPIService.getMealOfTheDay().enqueue(wrapCallback(callback));
     }
 
     @Override
-    public void searchMealsByName(String name, NetworkCallback<Object> callback) {
+    public void searchMealsByName(String name, NetworkCallback<MealResponse> callback) {
         mealAPIService.searchMealsByName(name).enqueue(wrapCallback(callback));
     }
 
     @Override
-    public void getMealsByCategory(String category, NetworkCallback<Object> callback) {
+    public void getMealsByCategory(String category, NetworkCallback<MealResponse> callback) {
         mealAPIService.getMealsByCategory(category).enqueue(wrapCallback(callback));
     }
 
     @Override
-    public void getMealsByIngredient(String ingredient, NetworkCallback<Object> callback) {
+    public void getMealsByIngredient(String ingredient, NetworkCallback<MealResponse> callback) {
         mealAPIService.getMealsByIngredient(ingredient).enqueue(wrapCallback(callback));
     }
 
     @Override
-    public void getMealsByCountry(String country, NetworkCallback<Object> callback) {
+    public void getMealsByCountry(String country, NetworkCallback<MealResponse> callback) {
         mealAPIService.getMealsByCountry(country).enqueue(wrapCallback(callback));
     }
 
     @Override
-    public void getMealDetails(String mealId, NetworkCallback<Object> callback) {
+    public void getMealDetails(String mealId, NetworkCallback<MealResponse> callback) {
         mealAPIService.getMealDetails(mealId).enqueue(wrapCallback(callback));
     }
 
     @Override
-    public void getAllCategories(NetworkCallback<Object> callback) {
+    public void getAllCategories(NetworkCallback<CategoryResponse> callback) {
         mealAPIService.getAllCategories().enqueue(wrapCallback(callback));
     }
 
     @Override
-    public void getAllCountries(NetworkCallback<Object> callback) {
+    public void getAllIngredients(NetworkCallback<IngredientResponse> callback) {
+        mealAPIService.getAllIngredients().enqueue(wrapCallback(callback));
+    }
+
+    @Override
+    public void getAllCountries(NetworkCallback<CountryResponse> callback) {
         mealAPIService.getAllCountries().enqueue(wrapCallback(callback));
     }
 
-    private Callback<MealResponse> wrapCallback(NetworkCallback<Object> callback) {
-        return new Callback<MealResponse>() {
+
+    private <T> Callback<T> wrapCallback(NetworkCallback<T> callback) {
+        return new Callback<T>() {
             @Override
-            public void onResponse(@NonNull Call<MealResponse> call, @NonNull Response<MealResponse> response) {
+            public void onResponse(Call<T> call, Response<T> response) {
                 if (response.isSuccessful() && response.body() != null) {
-
                     callback.onSuccess(response.body());
-
                 } else {
-                    callback.onFailure("No data found.");
+                    callback.onFailure("API Error: " + response.message());
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<MealResponse> call, @NonNull Throwable t) {
-                callback.onFailure(t.getMessage() != null ? t.getMessage() : "Network error");
+            public void onFailure(Call<T> call, Throwable t) {
+                callback.onFailure("Network Failure: " + t.getMessage());
             }
         };
     }
+
+
 }

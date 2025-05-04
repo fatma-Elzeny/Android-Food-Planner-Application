@@ -29,44 +29,50 @@ public class MealsRepositoryImpl implements MealsRepository {
     }
 
     @Override
-    public void getMealOfTheDay(NetworkCallback<Object> callback) {
+    public void getMealOfTheDay(NetworkCallback<MealResponse> callback) {
         remoteDataSource.getMealOfTheDay(callback);
     }
 
     @Override
-    public void searchMealsByName(String name, NetworkCallback<Object> callback) {
+    public void searchMealsByName(String name, NetworkCallback<MealResponse> callback) {
         remoteDataSource.searchMealsByName(name, callback);
     }
 
     @Override
-    public void getMealsByCategory(String category, NetworkCallback<Object> callback) {
+    public void getMealsByCategory(String category, NetworkCallback<MealResponse> callback) {
         remoteDataSource.getMealsByCategory(category, callback);
     }
 
     @Override
-    public void getMealsByIngredient(String ingredient, NetworkCallback<Object> callback) {
+    public void getMealsByIngredient(String ingredient, NetworkCallback<MealResponse> callback) {
         remoteDataSource.getMealsByIngredient(ingredient, callback);
     }
 
     @Override
-    public void getMealsByCountry(String country, NetworkCallback<Object> callback) {
+    public void getMealsByCountry(String country, NetworkCallback<MealResponse> callback) {
         remoteDataSource.getMealsByCountry(country, callback);
     }
 
     @Override
-    public void getMealDetails(String mealId, NetworkCallback<Object> callback) {
+    public void getMealDetails(String mealId, NetworkCallback<MealResponse> callback) {
         remoteDataSource.getMealDetails(mealId, callback);
     }
 
     @Override
-    public void getAllCategories(NetworkCallback<Object> callback) {
+    public void getAllCategories(NetworkCallback<CategoryResponse> callback) {
         remoteDataSource.getAllCategories(callback);
     }
 
     @Override
-    public void getAllCountries(NetworkCallback<Object> callback) {
+    public void getAllIngredients(NetworkCallback<IngredientResponse> callback) {
+        remoteDataSource.getAllIngredients(callback);
+    }
+
+    @Override
+    public void getAllCountries(NetworkCallback<CountryResponse> callback) {
         remoteDataSource.getAllCountries(callback);
     }
+
 
 
     // ===== Favorites =====

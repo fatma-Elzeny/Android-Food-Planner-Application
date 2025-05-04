@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +18,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.R;
+
 import com.example.foodplanner.SearchActivity;
 import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.model.MealsRepositoryImpl;
@@ -27,7 +27,6 @@ import com.example.foodplanner.planner.presenter.PlannerPresenter;
 import com.example.foodplanner.planner.presenter.PlannerPresenterImpl;
 import com.example.foodplanner.profile.view.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

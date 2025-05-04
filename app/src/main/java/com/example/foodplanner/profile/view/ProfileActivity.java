@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.R;
+
 import com.example.foodplanner.SearchActivity;
 import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.mainLogin.view.LoginActivity;

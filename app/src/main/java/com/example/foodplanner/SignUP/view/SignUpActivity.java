@@ -89,9 +89,11 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
     }
 
     @Override
-    public void showSignUpSuccess(String userName) {
+    public void showSignUpSuccess(String userName,String preferredCategory) {
         Toast.makeText(this, "Welcome, " + userName, Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, MainActivity.class));
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("CATEGORY_PREF", preferredCategory);
+        startActivity(intent);
         finish();
     }
 
