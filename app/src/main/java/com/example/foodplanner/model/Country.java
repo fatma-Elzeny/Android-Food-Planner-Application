@@ -3,20 +3,19 @@ package com.example.foodplanner.model;
 public class Country {
     private String strArea;
 
+
+
+    private String strFlag; // URL to country flag image
+
     public Country() {
-        }
+    }
+    // Getters and setters
+    public String getStrArea() {
+        return strArea;
+    }
 
-        public Country(String strArea) {
-            this.strArea = strArea;
-        }
-
-        // Getters and Setters
-        public String getStrArea() {
-            return strArea;
-        }
-
-        public void setStrArea(String strArea) {
-            this.strArea = strArea;
-        }
+    public String getStrFlag() {
+        return strFlag;
+    }
     }
 

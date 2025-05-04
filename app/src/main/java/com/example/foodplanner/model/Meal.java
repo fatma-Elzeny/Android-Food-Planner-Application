@@ -22,6 +22,8 @@ public class Meal {
     private String strInstructions;
     private String strYoutube;
 
+    private String strFlag;
+
     private String strIngredient1;
     private String strMeasure1;
     private String strIngredient2;
@@ -468,5 +470,9 @@ public class Meal {
 
     public void setIdMeal(String idMeal) {
         this.idMeal = idMeal;
+    }
+
+    public String getStrFlag() {
+        return strFlag;
     }
 }

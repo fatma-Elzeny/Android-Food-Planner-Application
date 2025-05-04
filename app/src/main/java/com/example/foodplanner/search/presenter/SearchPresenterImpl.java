@@ -8,18 +8,19 @@ import com.example.foodplanner.model.IngredientResponse;
 import com.example.foodplanner.model.MealResponse;
 import com.example.foodplanner.model.MealsRepository;
 import com.example.foodplanner.network.NetworkCallback;
-import com.example.foodplanner.search.view.SearchView;
+import com.example.foodplanner.search.view.SearchScreen;
 
 import java.util.List;
 
 public class SearchPresenterImpl implements searchPresenter {
-    private SearchView view;
-    private MealsRepository repository;
+    private final SearchScreen view;
+    private final MealsRepository repository;
 
-    public SearchPresenterImpl(SearchView view, MealsRepository repository) {
+    public SearchPresenterImpl(SearchScreen view, MealsRepository repository) {
         this.view = view;
         this.repository = repository;
     }
+
     @Override
     public void getMealsByCategory(String category) {
         view.showLoading();
@@ -116,7 +117,7 @@ public class SearchPresenterImpl implements searchPresenter {
             public void onSuccess(MealResponse data) {
                 view.hideLoading();
                 if (data != null && data.getMeals() != null && !data.getMeals().isEmpty()) {
-                    view.showMeals(data.getMeals()); // returns a list with one meal
+                    view.showMeals(data.getMeals());
                 } else {
                     view.showEmptyState("No meal found with this ID.");
                 }
@@ -129,5 +130,5 @@ public class SearchPresenterImpl implements searchPresenter {
             }
         });
     }
-
 }
+

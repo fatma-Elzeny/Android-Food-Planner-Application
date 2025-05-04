@@ -1,44 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_height="match_parent">
 
-    <!-- Search Tabs -->
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+    <Spinner
+        android:id="@+id/searchTypeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchViewID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabMode="fixed"
-        app:tabGravity="fill">
+        android:queryHint="Search..." />
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Categories"/>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Countries"/>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ingredients"/>
-    </com.google.android.material.tabs.TabLayout>
-
-    <!-- Search Bar -->
-    <EditText
-        android:id="@+id/searchInput"
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Search..."/>
+        android:layout_height="wrap_content" />
 
-    <!-- RecyclerView for Results -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/mealsRecyclerViewID"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>
