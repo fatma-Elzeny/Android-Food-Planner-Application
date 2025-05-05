@@ -80,7 +80,6 @@ public class MealsRemoteDataSourceImpl implements MealsRemoteDataSource {
         mealAPIService.getAllCountries().enqueue(wrapCallback(callback));
     }
 
-
     private <T> Callback<T> wrapCallback(NetworkCallback<T> callback) {
         return new Callback<T>() {
             @Override

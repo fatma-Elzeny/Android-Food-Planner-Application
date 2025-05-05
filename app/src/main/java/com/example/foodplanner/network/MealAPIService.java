@@ -26,7 +26,7 @@ public interface MealAPIService {
     @GET("lookup.php")
     Call<MealResponse> getMealDetails(@Query("i") String mealId);
 
-    @GET("list.php?c=list")
+    @GET("categories.php")
     Call<CategoryResponse> getAllCategories();
 
     @GET("list.php?i=list")

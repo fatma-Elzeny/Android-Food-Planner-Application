@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class CountryResponse {
-    @SerializedName("meals")
-    private List<Meal> meals;
+    @SerializedName("meals") // This must match the API response key
+    private List<Country> areas;
 
-    public List<Meal> getMeals() {
-        return meals;
+    public List<Country> getAreas() {
+        return areas;
     }
 }

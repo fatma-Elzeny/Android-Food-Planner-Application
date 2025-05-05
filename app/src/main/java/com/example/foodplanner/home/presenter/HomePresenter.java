@@ -8,4 +8,8 @@ public interface HomePresenter {
 
     void loadMealsByCategory(String category);
 
+    void getAllCategories();
+
+    void getAllAreas();
+    void getMealsByArea(String area);
 }
