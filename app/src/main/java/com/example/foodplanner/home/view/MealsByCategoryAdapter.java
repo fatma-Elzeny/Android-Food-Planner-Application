@@ -1,5 +1,6 @@
 package com.example.foodplanner.home.view;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MealsByCategoryAdapter extends RecyclerView.Adapter<MealsByCategoryAdapter.ViewHolder> {
-    private List<Meal> meals = new ArrayList<>();
+    private List<Meal> meals  = new ArrayList<>();
     private OnMealClickListener listener;
 
-    public interface OnMealClickListener {
-        void onMealClick(Meal meal);
-    }
-
-    public void setOnMealClickListener(OnMealClickListener listener) {
+    private Context context;
+    public MealsByCategoryAdapter(Context context, OnMealClickListener listener) {
+        this.context = context;
         this.listener = listener;
     }
+
 
     public void setMeals(List<Meal> meals) {
         this.meals = meals;
@@ -36,7 +36,7 @@ public class MealsByCategoryAdapter extends RecyclerView.Adapter<MealsByCategory
     @NonNull
     @Override
     public MealsByCategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_meal_by_category, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lazy_meal, parent, false);
         return new ViewHolder(view);
     }
 
@@ -64,8 +64,8 @@ public class MealsByCategoryAdapter extends RecyclerView.Adapter<MealsByCategory
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mealImage = itemView.findViewById(R.id.img_meal);
-            mealName = itemView.findViewById(R.id.txt_meal_name);
+            mealImage = itemView.findViewById(R.id.imageMeal);
+            mealName = itemView.findViewById(R.id.textMealName);
         }
     }
 }

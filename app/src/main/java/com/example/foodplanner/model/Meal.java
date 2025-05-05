@@ -24,6 +24,21 @@ public class Meal {
 
     private String strFlag;
 
+    private String type; // Add this field to distinguish between meal, country, category
+
+    // Add this new field to your existing constructors/getters/setters
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Meal() {
+
+    }
+
     public void setStrFlag(String strFlag) {
         this.strFlag = strFlag;
     }

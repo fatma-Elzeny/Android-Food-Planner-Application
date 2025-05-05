@@ -24,6 +24,6 @@
     <item
         android:id="@+id/navigation_search"
         android:icon="@drawable/ic_search"
-        android:title="Profile" />
+        android:title="Search" />
 
 </menu>

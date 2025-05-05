@@ -49,28 +49,42 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MealViewHo
             return;
         }
 
-        Meal meal = mealList.get(position);
-        if (meal == null) {
+        Meal item = mealList.get(position);
+        if (item == null) {
             Log.e(TAG, "Meal at position " + position + " is null");
             return;
         }
 
         if (holder.mealName != null) {
-            holder.mealName.setText(meal.getStrMeal() != null ? meal.getStrMeal() : "No name available");
+            holder.mealName.setText(item.getStrMeal() != null ? item.getStrMeal() : "No name available");
         }
 
-        if (holder.mealImage != null && meal.getStrMealThumb() != null) {
+        if ("country".equals(item.getType())) {
+            // Country flag loading
             Glide.with(context)
-                    .load(meal.getStrMealThumb())
+                    .load(item.getStrMealThumb())
+                    .placeholder(R.drawable.ic_placeholder)
+                    .into(holder.mealImage);
+        } else if ("ingredient".equals(item.getType())) {
+            // Ingredient image loading
+            Glide.with(context)
+                    .load(item.getStrMealThumb())
+                    .placeholder(R.drawable.ic_placeholder)
+                    .into(holder.mealImage);
+        } else {
+            // Default meal loading
+            Glide.with(context)
+                    .load(item.getStrMealThumb())
                     .placeholder(R.drawable.ic_placeholder)
                     .into(holder.mealImage);
         }
 
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(meal);
+                onItemClickListener.onItemClick(item);
             }
         });
+
     }
 
     @Override

@@ -16,6 +16,8 @@ public interface HomeView {
     void showLazyMeals(List<Meal> meals);
     void showError(String message);
 
+    void showEmptyState(String s);
+
     // For categories section
     void showCategories(List<Category> categories);
     void showCategoryLoading();

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.R;
 import com.example.foodplanner.db.MealsLocalDataSourceImpl;
+import com.example.foodplanner.model.Category;
 import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
@@ -60,13 +61,24 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         searchTypeSpinner.setAdapter(spinnerAdapter);
 
+        // SearchActivity.java
         searchTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedSearchType = searchOptions[position];
                 updateSearchHint(selectedSearchType);
-            }
 
+                if (selectedSearchType.equals("Categories")) {
+                    searchPresenter.getAllCategories();
+                } else if (selectedSearchType.equals("Countries")) {
+                    searchPresenter.getAllCountries();
+                } else if (selectedSearchType.equals("Ingredients")) {
+                    searchPresenter.getAllIngredients(); // Add this line
+                } else {
+                    mealList.clear();
+                    searchAdapter.notifyDataSetChanged();
+                }
+            }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Do nothing
@@ -134,11 +146,18 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
     }
 
     @Override
-    public void onItemClick(Meal meal) {
-        // Handle meal item click, for example, navigate to a detailed activity
-        Intent intent = new Intent(this, MealDetailsActivity.class);
-        intent.putExtra("mealId", meal.getIdMeal());
-        startActivity(intent);
+    public void onItemClick(Meal item) {
+        if ("country".equals(item.getType())) {
+            searchPresenter.getMealsByCountry(item.getStrMeal());
+        } else if ("category".equals(item.getType())) {
+            searchPresenter.getMealsByCategory(item.getStrMeal());
+        } else if ("ingredient".equals(item.getType())) {
+            searchPresenter.getMealsByIngredient(item.getStrMeal()); // Add this
+        } else {
+            Intent intent = new Intent(this, MealDetailsActivity.class);
+            intent.putExtra("mealId", item.getIdMeal());
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -165,6 +184,7 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
 
         progressBar2.setVisibility(View.GONE);
     }
+
 
     @Override
     public void showEmptyState(String message) {

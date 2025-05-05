@@ -41,7 +41,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements HomeView,OnMealClickListener ,
-        CategoriesAdapter.OnCategoryClickListener, AreaAdapter.OnAreaClickListener ,MealsByCategoryAdapter.OnMealClickListener{
+        CategoriesAdapter.OnCategoryClickListener, AreaAdapter.OnAreaClickListener {
     private HomePresenter presenter;
     private ImageView mealImage;
     private TextView mealName, mealInstructions, lazyMealsTitle;
@@ -53,12 +53,14 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     private CategoriesAdapter categoriesAdapter;
     private RecyclerView areasRecycler;
     private AreaAdapter areaAdapter;
+    private RecyclerView mealsByCategoryRecycler;
+
+    private MealsByCategoryAdapter mealsByCategoryAdapter;
     private RecyclerView mealsByAreaRecycler;
     private MealsByCategoryAdapter mealsByAreaAdapter;
-
     private ProgressBar areaProgressBar;
     private ProgressBar categoryProgressBar;
-    private TextView mealsByAreaTitle;
+    private TextView mealsByAreaTitle,categoryMealsTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         areaProgressBar = findViewById(R.id.areaProgressBar);
         categoryProgressBar = findViewById(R.id.categoryProgressBar);
         mealsByAreaTitle = findViewById(R.id.areaMealsTitle);
+        categoryMealsTitle=findViewById(R.id.categoryMealsTitle);
         MealsRepository repository = new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this));
         presenter = new HomePresenterImpl(this, repository);
 
@@ -112,10 +115,16 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
                 LinearLayoutManager.HORIZONTAL, false));
         areasRecycler.setAdapter(areaAdapter);
 
+        // Initialize Meals by Category RecyclerView
+        mealsByCategoryRecycler=findViewById(R.id.mealsByCategoryRecycler);
+        mealsByCategoryAdapter = new MealsByCategoryAdapter(this,this);
+        mealsByCategoryRecycler.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false));
+        mealsByCategoryRecycler.setAdapter(mealsByCategoryAdapter);
+
         // Initialize Meals by Area RecyclerView
         mealsByAreaRecycler = findViewById(R.id.mealsByAreaRecycler);
-        mealsByAreaAdapter = new MealsByCategoryAdapter();
-        mealsByAreaAdapter.setOnMealClickListener(this);
+        mealsByAreaAdapter = new MealsByCategoryAdapter(this,this);
         mealsByAreaRecycler.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false));
         mealsByAreaRecycler.setAdapter(mealsByAreaAdapter);
@@ -196,7 +205,11 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
 
     @Override
     public void showMealsByCategory(String category, List<Meal> meals) {
+
         adapter.setMeals(meals);
+        mealsByCategoryAdapter.setMeals(meals);
+        categoryMealsTitle.setText("Meals For "+ category);
+        mealsByCategoryRecycler.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -257,13 +270,17 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     @Override
     public void onCategoryClick(String category) {
         presenter.loadMealsByCategory(category);
-        lazyMealsTitle.setText("Meals for " + category);
+
     }
 
     @Override
     public void onAreaClick(String area) {
         presenter.getMealsByArea(area);
         mealsByAreaTitle.setText("Loading meals from " + area + "...");
-        mealsByAreaRecycler.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showEmptyState(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

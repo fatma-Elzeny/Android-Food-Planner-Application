@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.foodplanner.CountryFlagHelper;
 import com.example.foodplanner.R;
 import com.example.foodplanner.model.Country;
 
@@ -46,8 +47,13 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Country area = areas.get(position);
         holder.areaName.setText(area.getStrArea());
+
+        // Use CountryFlagHelper to get flag URL
+        String flagUrl = CountryFlagHelper.getFlagUrl(area.getStrArea());
+
         Glide.with(holder.itemView.getContext())
-                .load(area.getStrFlag())
+                .load(flagUrl)
+                .placeholder(R.drawable.ic_placeholder)
                 .into(holder.areaFlag);
 
         holder.itemView.setOnClickListener(v -> {
