@@ -14,15 +14,22 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
+import com.example.foodplanner.NetworkUtil;
+import com.example.foodplanner.NoInternetDialog;
 import com.example.foodplanner.R;
 import com.example.foodplanner.db.MealsLocalDataSourceImpl;
+import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.model.Category;
 import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
+import com.example.foodplanner.planner.view.PlannerActivity;
+import com.example.foodplanner.profile.view.ProfileActivity;
 import com.example.foodplanner.search.presenter.searchPresenter;
 import com.example.foodplanner.search.presenter.SearchPresenterImpl;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +57,10 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
         mealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         searchAdapter = new SearchAdapter(this, mealList,this);
         mealsRecyclerView.setAdapter(searchAdapter);
-
+        if (!NetworkUtil.isOnline(this)) {
+            NoInternetDialog.show(this);
+            return; // Skip calling Presenter/Remote
+        }
         searchPresenter = new SearchPresenterImpl(this,
                 MealsRepositoryImpl.getInstance(
                         MealsRemoteDataSourceImpl.getInstance(),
@@ -127,6 +137,32 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
                 searchView.setQueryHint("Search By Ingredient Name . . .");
                 break;
         }
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.navigation_search) {
+                return true; // Stay here
+            } else if (id == R.id.navigation_favorites) {
+                startActivity(new Intent(this, FavoritesActivity.class));
+                return true;
+            } else if (id == R.id.navigation_planner) {
+                startActivity(new Intent(this, PlannerActivity.class));
+                return true;
+            } else if (id == R.id.navigation_profile) {
+                startActivity(new Intent(this, ProfileActivity.class));
+                return true;
+            } else if (id == R.id.navigation_home) {
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            }
+
+            return false;
+        });
+
+
     }
 
     @Override
@@ -152,10 +188,10 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
         } else if ("category".equals(item.getType())) {
             searchPresenter.getMealsByCategory(item.getStrMeal());
         } else if ("ingredient".equals(item.getType())) {
-            searchPresenter.getMealsByIngredient(item.getStrMeal()); // Add this
+            searchPresenter.getMealsByIngredient(item.getStrMeal());
         } else {
             Intent intent = new Intent(this, MealDetailsActivity.class);
-            intent.putExtra("mealId", item.getIdMeal());
+            intent.putExtra("MEAL_ID", item.getIdMeal());
             startActivity(intent);
         }
     }

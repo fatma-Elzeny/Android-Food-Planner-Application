@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
             preferredCategory = "Beef"; // 🟣 Default category if not set (e.g., guest or Google)
         }
 
-        presenter.loadMealsByCategory(preferredCategory);
+        presenter.getMealsByCategory(preferredCategory);
         lazyMealsTitle.setText("Meals for " + preferredCategory);
 
         // Initialize Categories RecyclerView
@@ -116,11 +116,13 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         areasRecycler.setAdapter(areaAdapter);
 
         // Initialize Meals by Category RecyclerView
+
         mealsByCategoryRecycler=findViewById(R.id.mealsByCategoryRecycler);
         mealsByCategoryAdapter = new MealsByCategoryAdapter(this,this);
         mealsByCategoryRecycler.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false));
         mealsByCategoryRecycler.setAdapter(mealsByCategoryAdapter);
+        mealsByCategoryRecycler.setVisibility(View.GONE);
 
         // Initialize Meals by Area RecyclerView
         mealsByAreaRecycler = findViewById(R.id.mealsByAreaRecycler);
@@ -190,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     @Override
     public void showLazyMeals(List<Meal> meals) {
         adapter.setMeals(meals);
+        lazyMealsRecycler.setVisibility(View.VISIBLE); // Explicitly ensure visibility
     }
 
     @Override
@@ -199,6 +202,8 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
 
     @Override
     protected void onDestroy() {
+        categoryMealsTitle.setVisibility(View.GONE);
+        mealsByAreaTitle.setVisibility(View.GONE);
         super.onDestroy();
         presenter.onDestroy();
     }
@@ -206,10 +211,13 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     @Override
     public void showMealsByCategory(String category, List<Meal> meals) {
 
-        adapter.setMeals(meals);
+        //adapter.setMeals(meals);
         mealsByCategoryAdapter.setMeals(meals);
         categoryMealsTitle.setText("Meals For "+ category);
         mealsByCategoryRecycler.setVisibility(View.VISIBLE);
+        if(meals.isEmpty()) {
+            categoryMealsTitle.setText("No meals found for " + category);
+        }
     }
 
     @Override
@@ -217,6 +225,9 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         mealsByAreaTitle.setText("Meals from " + areaName);
         mealsByAreaAdapter.setMeals(meals);
         mealsByAreaRecycler.setVisibility(View.VISIBLE);
+        if(meals.isEmpty()) {
+            mealsByAreaTitle.setText("No meals found from " + areaName);
+        }
     }
 
     @Override
@@ -235,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     @Override
     public void showAreaLoading() {
         areaProgressBar.setVisibility(View.VISIBLE);
-        findViewById(R.id.areasRecycler).setVisibility(View.GONE);
+
     }
 
     @Override
@@ -247,10 +258,8 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     public void showCategories(List<Category> categories) {
         if (categories != null) {
             categoriesAdapter.setCategories(categories);
-            findViewById(R.id.categoriesRecycler).setVisibility(View.VISIBLE);
+            categoriesRecycler.setVisibility(View.VISIBLE); // Always visible
         } else {
-            // Handle null case - show error or empty state
-            findViewById(R.id.categoriesRecycler).setVisibility(View.GONE);
             showError("No categories available");
         }
 
@@ -259,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     @Override
     public void showCategoryLoading() {
         categoryProgressBar.setVisibility(View.VISIBLE);
-        findViewById(R.id.categoriesRecycler).setVisibility(View.GONE);
+
     }
 
     @Override
@@ -270,13 +279,18 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     @Override
     public void onCategoryClick(String category) {
         presenter.loadMealsByCategory(category);
+        categoryMealsTitle.setVisibility(View.VISIBLE);
+        categoryMealsTitle.setText("Meals For " + category);
+        mealsByCategoryRecycler.setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void onAreaClick(String area) {
         presenter.getMealsByArea(area);
+        mealsByAreaTitle.setVisibility(View.VISIBLE);
         mealsByAreaTitle.setText("Loading meals from " + area + "...");
+        mealsByAreaRecycler.setVisibility(View.VISIBLE);
     }
 
     @Override
