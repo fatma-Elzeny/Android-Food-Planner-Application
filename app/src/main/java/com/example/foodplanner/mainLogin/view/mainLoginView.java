@@ -5,4 +5,5 @@ public interface mainLoginView {
     void hideLoading();
     void onLoginSuccess();
     void onLoginFailure(String message);
+    void persistUser(String uid); // New method
 }

@@ -10,7 +10,6 @@ import com.example.foodplanner.Favorite.view.FavoritesActivity;
 import com.example.foodplanner.MealDetail.view.MealDetailsActivity;
 import com.example.foodplanner.NetworkUtil;
 import com.example.foodplanner.NoInternetDialog;
-import com.example.foodplanner.UserSessionManager;
 import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.mainLogin.view.LoginActivity;
 import com.example.foodplanner.model.Category;

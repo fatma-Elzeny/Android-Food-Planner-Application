@@ -142,7 +142,7 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
         }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-
+        bottomNavigationView.setSelectedItemId(R.id.navigation_search);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             Bundle extras = getIntent().getExtras();

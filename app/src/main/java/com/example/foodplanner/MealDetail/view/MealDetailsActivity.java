@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.foodplanner.CalendarHelper;
 import com.example.foodplanner.MealDetail.model.IngredientItem;
 import com.example.foodplanner.MealDetail.presenter.MealDetailPresenter;
 import com.example.foodplanner.MealDetail.presenter.MealDetailPresenterImpl;
@@ -139,6 +140,12 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 planned.setDay(dayName);
                 planned.setUserId(currentMeal.getUserId());
                 planned.setDate(formattedDate);
+                CalendarHelper helper = new CalendarHelper(this, "FoodPlanner");
+                long eventId = helper.addEvent(planned);
+                planned.setEventId(eventId);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(2025, Calendar.MAY, 8, 12, 30);
+                planned.setDateTimeInMillis(calendar.getTimeInMillis());
                 new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)).insertPlannedMeal(planned);
                 Toast.makeText(this, "Meal planned for " + dayName + " (" + formattedDate + ")", Toast.LENGTH_SHORT).show();
             }

@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,6 +54,8 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
     private LottieAnimationView noMealsAnimation;
     private TextView noMealsText;
     private String userId;
+
+    private static final int PERMISSION_REQUEST_CODE = 100;
     private Calendar selectedCalendar = Calendar.getInstance();
     private final SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
 
@@ -142,7 +146,22 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
             tvSelectedDay.setText("Meals on " + selectedDay);
             presenter.loadMealsForDay(selectedDay);
         });
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    android.Manifest.permission.READ_CALENDAR,
+                    android.Manifest.permission.WRITE_CALENDAR
+            }, PERMISSION_REQUEST_CODE);
+        }
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Calendar permissions are required to sync meals", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private boolean isWithinCurrentWeek(Calendar date) {

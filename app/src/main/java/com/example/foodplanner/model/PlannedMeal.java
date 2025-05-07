@@ -19,7 +19,17 @@ public class PlannedMeal {
     private String day;
     private String date;
     private String userId;
+    private long eventId;
+    private long dateTimeInMillis;
 
+    public void setDateTimeInMillis(long dateTimeInMillis) {
+        this.dateTimeInMillis = dateTimeInMillis;
+    }
+
+    public long getDateTimeInMillis() { return dateTimeInMillis; }
+
+    public long getEventId() { return eventId; }
+    public void setEventId(long eventId) { this.eventId = eventId; }
 
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }

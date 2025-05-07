@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.foodplanner.CalendarHelper;
 import com.example.foodplanner.model.MealsRepository;
 import com.example.foodplanner.model.PlannedMeal;
 import com.example.foodplanner.planner.view.PlannerView;
@@ -40,6 +41,10 @@ public class PlannerPresenterImpl implements PlannerPresenter {
     @Override
     public void deletePlannedMeal(PlannedMeal meal) {
         repository.deletePlannedMeal(meal);
+        new Handler(Looper.getMainLooper()).post(() -> {
+            CalendarHelper helper = new CalendarHelper(((PlannerView) view).getContext(), "FoodPlanner");
+            helper.deleteEvent(meal.getEventId());
+        });
         loadMealsForDay(meal.getDay());
     }
 
