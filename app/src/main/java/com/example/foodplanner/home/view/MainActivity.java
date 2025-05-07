@@ -1,7 +1,9 @@
 package com.example.foodplanner.home.view;
 
 import android.os.Bundle;
-
+import com.google.gson.Gson;
+import android.content.SharedPreferences;
+import java.util.Calendar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     private ProgressBar areaProgressBar;
     private ProgressBar categoryProgressBar;
     private TextView mealsByAreaTitle,categoryMealsTitle;
+    private static final String PREFS_NAME = "MealOfTheDayPrefs";
+    private static final String KEY_MEAL_JSON = "meal_json";
+    private static final String KEY_SAVED_TIME = "saved_time";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +89,38 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         lazyMealsRecycler.setAdapter(adapter);
         if (!NetworkUtil.isOnline(this)) {
             NoInternetDialog.show(this);
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            String mealJson = prefs.getString(KEY_MEAL_JSON, null);
+            if (mealJson != null) {
+                Gson gson = new Gson();
+                Meal savedMeal = gson.fromJson(mealJson, Meal.class);
+                showSuggestedMeal(savedMeal);
+            } else {
+                showError("No internet connection");
+            }
             return; // Skip calling Presenter/Remote
         }
-        presenter.getMealOfTheDay();
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String mealJson = prefs.getString(KEY_MEAL_JSON, null);
+        long savedTime = prefs.getLong(KEY_SAVED_TIME, 0);
+
+        boolean shouldFetchNew = true;
+        if (mealJson != null && savedTime != 0) {
+            Gson gson = new Gson();
+            Meal savedMeal = gson.fromJson(mealJson, Meal.class);
+            long currentTime = System.currentTimeMillis();
+            boolean isNewDay = isNewDay(savedTime, currentTime);
+            boolean is24HoursPassed = (currentTime - savedTime) >= 24 * 60 * 60 * 1000;
+
+            if (!isNewDay && !is24HoursPassed) {
+                showSuggestedMeal(savedMeal);
+                shouldFetchNew = false;
+            }
+        }
+
+        if (shouldFetchNew) {
+            presenter.getMealOfTheDay();
+        }
 
 
         String preferredCategory = getIntent().getStringExtra("CATEGORY_PREF");
@@ -192,6 +227,19 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
 
     }
 
+
+        private boolean isNewDay(long savedTimeMillis, long currentTimeMillis) {
+            Calendar savedCal = Calendar.getInstance();
+            savedCal.setTimeInMillis(savedTimeMillis);
+            Calendar currentCal = Calendar.getInstance();
+            currentCal.setTimeInMillis(currentTimeMillis);
+
+            return savedCal.get(Calendar.YEAR) != currentCal.get(Calendar.YEAR) ||
+                    savedCal.get(Calendar.DAY_OF_YEAR) != currentCal.get(Calendar.DAY_OF_YEAR);
+        }
+
+
+
     public void onMealClick(Meal meal) {
         // Handle click
         Intent intent = new Intent(MainActivity.this, MealDetailsActivity.class);
@@ -211,6 +259,15 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
 
     @Override
     public void showSuggestedMeal(Meal meal) {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String mealJson = gson.toJson(meal);
+        editor.putString(KEY_MEAL_JSON, mealJson);
+        editor.putLong(KEY_SAVED_TIME, System.currentTimeMillis());
+        editor.apply();
+
+        // Update UI
         mealName.setText(meal.getStrMeal());
         mealInstructions.setText(meal.getStrInstructions());
         Glide.with(this).load(meal.getStrMealThumb()).into(mealImage);
@@ -221,6 +278,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
             startActivity(intent);
         });
     }
+
 
     @Override
     public void showLazyMeals(List<Meal> meals) {

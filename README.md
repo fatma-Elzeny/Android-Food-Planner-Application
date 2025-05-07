@@ -57,7 +57,7 @@ View (Activity/Fragment) <--> Presenter <--> Repository <--> Data Sources (Remot
 ## UMLs (Relation between Different classes)
 
 ![Subdirectory Image](images/MainLoginUML.png)
-![Subdirectory Image](images/SignUpUMl.png)
+![Subdirectory Image](images/SignUpUML.png)
 ![Subdirectory Image](images/AuthLogin.png)
 ![Subdirectory Image](images/DataFlowUML.png)
 ![Subdirectory Image](images/HomeUML.png)
