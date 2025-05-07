@@ -14,6 +14,8 @@ public interface MealsLocalDataSource {
 
     // Favourite Meals
 
+    void setCurrentUserId(String userId);
+
     LiveData<List<FavoriteMeal>> getAllFavorites();
 
     void insertMeal(FavoriteMeal meal);

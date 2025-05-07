@@ -13,6 +13,17 @@ public class FavoriteMeal {
     private String strCategory;
     private String strArea;
     private String strMealThumb;
+
+    private String userId;
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
     public FavoriteMeal(){
 
 

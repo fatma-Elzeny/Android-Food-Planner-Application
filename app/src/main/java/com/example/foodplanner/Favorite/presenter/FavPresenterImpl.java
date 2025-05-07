@@ -17,6 +17,9 @@ public class FavPresenterImpl implements Favpresenter {
         this.view = view;
         this.repository = repository;
     }
+    public MealsRepository getRepository() {
+        return repository;
+    }
 
     @Override
     public void getFavoriteMeals() {
@@ -26,7 +29,7 @@ public class FavPresenterImpl implements Favpresenter {
     @Override
     public void deleteMeal(FavoriteMeal meal) {
         repository.deleteFavorite(meal);
-        getFavoriteMeals(); // Refresh list
+
     }
 
     @Override

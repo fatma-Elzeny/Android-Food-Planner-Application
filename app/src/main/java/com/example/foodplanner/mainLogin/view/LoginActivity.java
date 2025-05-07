@@ -1,6 +1,7 @@
 package com.example.foodplanner.mainLogin.view;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +31,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.common.api.ApiException;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 
@@ -110,7 +112,16 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
             public void onSuccess(LoginResult loginResult) {
                 AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
                 firebaseAuth.signInWithCredential(credential)
-                        .addOnSuccessListener(authResult -> gotoMain())
+                        .addOnSuccessListener(authResult ->   {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            if (user != null) {
+                                String uid = user.getUid();
+                                SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
+                                prefs.edit().putString("USER_UID", uid).apply(); // ✅ Save UID
+                            }
+
+                            gotoMain();
+            })
                         .addOnFailureListener(e -> toast("Facebook sign-in failed."));
             }
 
@@ -186,6 +197,13 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
         FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null) {
+                            String uid = user.getUid(); // 🔑 Use UID
+                            SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
+                            prefs.edit().putString("USER_UID", uid).apply(); // ✅ Save UID
+                        }
+
                         startActivity(new Intent(this, MainActivity.class));
                         finish();
                     } else {

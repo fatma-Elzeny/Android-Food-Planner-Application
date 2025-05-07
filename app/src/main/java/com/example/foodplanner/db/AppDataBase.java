@@ -13,7 +13,7 @@ import com.example.foodplanner.model.PlannedMeal;
 
 @Database(
         entities = {FavoriteMeal.class, PlannedMeal.class,Meal.class},
-        version =3
+        version =4
 )
 
 public abstract class AppDataBase extends RoomDatabase {

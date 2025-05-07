@@ -84,6 +84,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 fav.setIdMeal(currentMeal.getIdMeal());
                 fav.setStrMeal(currentMeal.getStrMeal());
                 fav.setStrMealThumb(currentMeal.getStrMealThumb());
+                fav.setUserId(currentMeal.getUserId());
                 new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)).insertFavorite(fav);
                 Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
             }

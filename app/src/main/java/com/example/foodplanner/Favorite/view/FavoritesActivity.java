@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,8 +55,17 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new FavoritesAdapter(this);
         recyclerView.setAdapter(adapter);
+        SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
+        String currentUserUid = prefs.getString("USER_UID", null);
 
-        presenter = new FavPresenterImpl(this, new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)));
+        // Set the user ID in the repository
+        MealsRepositoryImpl repository = new MealsRepositoryImpl(
+                MealsRemoteDataSourceImpl.getInstance(),
+                MealsLocalDataSourceImpl.getInstance(this)
+        );
+        repository.setCurrentUserId(currentUserUid); // Add this line
+
+        presenter = new FavPresenterImpl(this, repository); // Use the configured repository
         presenter.getFavoriteMeals();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_favorites);

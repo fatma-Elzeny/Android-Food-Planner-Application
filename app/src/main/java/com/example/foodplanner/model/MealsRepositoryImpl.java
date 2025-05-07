@@ -76,7 +76,9 @@ public class MealsRepositoryImpl implements MealsRepository {
         mealRemoteDataSource.getAllCountries(callback);
     }
 
-
+    public void setCurrentUserId(String userId) {
+        mealLocalDataSource.setCurrentUserId(userId);
+    }
 
     // ===== Favorites =====
 

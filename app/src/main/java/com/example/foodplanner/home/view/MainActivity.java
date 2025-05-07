@@ -178,12 +178,12 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
                     }
             } else if (id == R.id.navigation_profile) {
                 Intent intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra("key", 1); // guest
+                intent.putExtra("key", value); // guest
                 startActivity(intent);
                 return true;
             } else if (id == R.id.navigation_search) {
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra("key", 1); // guest
+                intent.putExtra("key", value); // guest
                 startActivity(intent);
                 return true;
             }

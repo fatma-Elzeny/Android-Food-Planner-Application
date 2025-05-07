@@ -19,9 +19,8 @@ public interface FavoriteMealDao {
     @Delete
     void deleteFavoriteMeal(FavoriteMeal meal);
 
-    @Query("SELECT * FROM favorite_meals")
-    LiveData<List<FavoriteMeal>> getAllFavorites();
-
+    @Query("SELECT * FROM favorite_meals WHERE userId = :userId")
+    LiveData<List<FavoriteMeal>> getAllFavorites(String userId);
     @Query("SELECT * FROM favorite_meals WHERE idMeal = :mealId")
     Meal getFavoriteById(String mealId);
 

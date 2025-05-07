@@ -98,7 +98,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
                 return true;
             } else if (id == R.id.navigation_search) {
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra("key", 1); // guest
+                intent.putExtra("key", value); // guest
                 startActivity(intent);
                 return true;
             }

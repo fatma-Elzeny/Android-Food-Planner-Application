@@ -1,9 +1,6 @@
 package com.example.foodplanner.db;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -21,6 +18,15 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     private static MealsLocalDataSource mealLocalDataSource=null;
     private LiveData<List<FavoriteMeal>> storedMeals;
 
+    private String currentUserId; // 🟢 Hold current user ID dynamically
+
+   @Override
+   public void setCurrentUserId(String userId) {
+
+       this.currentUserId = userId;
+       storedMeals = favoriteMealDao.getAllFavorites(userId);
+    }
+
     private LiveData<List<Meal>> plannedMeals;
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -30,7 +36,7 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
         AppDataBase db =AppDataBase.getInstance(context.getApplicationContext());
         favoriteMealDao = db.favoriteMealDao();
         plannedMealDao = db.plannedMealDao();
-        storedMeals=favoriteMealDao.getAllFavorites();
+        storedMeals=favoriteMealDao.getAllFavorites(currentUserId);
     }
 
     public  static MealsLocalDataSource getInstance(Context context)
@@ -44,21 +50,13 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
 
     @Override
     public LiveData<List<FavoriteMeal>> getAllFavorites() {
-        return storedMeals;
+        return favoriteMealDao.getAllFavorites(currentUserId);
     }
 
     @Override
     public void insertMeal(FavoriteMeal meal) {
-
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                favoriteMealDao.insertFavoriteMeal(meal);
-                Log.i("MealInsert", "Inserted meal: " + meal.getStrMeal());
-
-            }
-        }.start();
+        meal.setUserId(currentUserId); // 🟢 Associate with current user
+        new Thread(() -> favoriteMealDao.insertFavoriteMeal(meal)).start();
     }
 
     @Override

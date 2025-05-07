@@ -21,7 +21,15 @@ public class Meal {
     private String strMealThumb;
     private String strInstructions;
     private String strYoutube;
+    private String userId;
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
     private String strFlag;
 
     private String type; // Add this field to distinguish between meal, country, category
