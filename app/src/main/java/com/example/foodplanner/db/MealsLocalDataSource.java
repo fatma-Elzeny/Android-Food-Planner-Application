@@ -24,7 +24,7 @@ public interface MealsLocalDataSource {
 
 
     // planned meals
-    LiveData<List<PlannedMeal>> getPlannedFood(String date);
+    LiveData<List<PlannedMeal>> getPlannedFood(String date,String userId);
     void insertFoodPlan(PlannedMeal foodPlan);
     void deleteFoodPlan(PlannedMeal foodPlan);
     void updateFoodPlan(PlannedMeal foodPlan);

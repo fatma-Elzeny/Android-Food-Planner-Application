@@ -71,12 +71,14 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     }
 
     @Override
-    public LiveData<List<PlannedMeal>> getPlannedFood(String date) {
-        return plannedMealDao.getMealsByDay(date);
+    public LiveData<List<PlannedMeal>> getPlannedFood(String date, String userId) {
+        return plannedMealDao.getMealsByDay(date, userId);
     }
+
 
     @Override
     public void insertFoodPlan( PlannedMeal plannedMeal) {
+        plannedMeal.setUserId(currentUserId);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -87,6 +89,7 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
 
     @Override
     public void deleteFoodPlan(PlannedMeal plannedMeal) {
+
         new Thread(new Runnable() {
             @Override
             public void run() {

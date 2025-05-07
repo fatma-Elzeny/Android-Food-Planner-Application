@@ -137,6 +137,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
                 planned.setMealName(currentMeal.getStrMeal());
                 planned.setMealThumb(currentMeal.getStrMealThumb());
                 planned.setDay(dayName);
+                planned.setUserId(currentMeal.getUserId());
                 planned.setDate(formattedDate);
                 new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)).insertPlannedMeal(planned);
                 Toast.makeText(this, "Meal planned for " + dayName + " (" + formattedDate + ")", Toast.LENGTH_SHORT).show();

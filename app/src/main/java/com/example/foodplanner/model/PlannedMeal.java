@@ -18,6 +18,11 @@ public class PlannedMeal {
     private String mealThumb;
     private String day;
     private String date;
+    private String userId;
+
+
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
     public void setDate(String date) {
         this.date = date;
     }

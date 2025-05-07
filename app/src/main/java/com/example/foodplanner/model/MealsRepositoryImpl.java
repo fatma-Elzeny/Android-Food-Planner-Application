@@ -112,10 +112,10 @@ public class MealsRepositoryImpl implements MealsRepository {
     }
 
     @Override
-    public LiveData<List<PlannedMeal>> getMealsByDay(String day) {
-        // Optional: should also be exposed via LiveData for UI safety
-      return  mealLocalDataSource.getPlannedFood(day);
+    public LiveData<List<PlannedMeal>> getMealsByDay(String day, String userId) {
+        return mealLocalDataSource.getPlannedFood(day, userId);
     }
+
     @Override
     public void updatePlannedMeal(PlannedMeal plannedMeal) {
         mealLocalDataSource.updateFoodPlan(plannedMeal);

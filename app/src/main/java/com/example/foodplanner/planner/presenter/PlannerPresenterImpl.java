@@ -14,15 +14,17 @@ import java.util.List;
 public class PlannerPresenterImpl implements PlannerPresenter {
     private final PlannerView view;
     private final MealsRepository repository;
+    private final String userId;
 
-    public PlannerPresenterImpl(PlannerView view, MealsRepository repository) {
+    public PlannerPresenterImpl(PlannerView view, MealsRepository repository, String userId) {
         this.view = view;
         this.repository = repository;
+        this.userId = userId;
     }
 
     @Override
     public LiveData<List<PlannedMeal>> loadMealsForDay(String day) {
-        LiveData<List<PlannedMeal>> meals = repository.getMealsByDay(day);
+        LiveData<List<PlannedMeal>> meals = repository.getMealsByDay(day,userId);
         meals.observeForever(newMeals -> {
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (newMeals == null || newMeals.isEmpty()) {

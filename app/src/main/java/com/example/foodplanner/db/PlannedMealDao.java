@@ -19,8 +19,9 @@ public interface PlannedMealDao {
     @Delete
     void deletePlannedMeal(PlannedMeal meal);
 
-    @Query("SELECT * FROM planned_meals WHERE day = :day")
-    LiveData<List<PlannedMeal>>getMealsByDay(String day);
+    @Query("SELECT * FROM planned_meals WHERE day = :day AND userId = :userId")
+    LiveData<List<PlannedMeal>> getMealsByDay(String day, String userId);
+
 
     @Query("SELECT * FROM planned_meals")
     List<PlannedMeal> getAllPlannedMeals();

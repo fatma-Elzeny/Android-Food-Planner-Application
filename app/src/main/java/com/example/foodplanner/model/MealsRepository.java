@@ -39,7 +39,8 @@ public interface MealsRepository {
 
     void deletePlannedMeal(PlannedMeal meal);
 
-    LiveData<List<PlannedMeal>> getMealsByDay(String day);
+    LiveData<List<PlannedMeal>> getMealsByDay(String day, String userId);
+
 
 
     void updatePlannedMeal(PlannedMeal plannedMeal);

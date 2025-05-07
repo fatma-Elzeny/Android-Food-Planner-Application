@@ -85,6 +85,8 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
         btnSignUp.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
         btnGuest.setOnClickListener(v -> {
             guest_flag= 1;
+            SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
+            prefs.edit().remove("USER_UID").apply();
             Intent i = new Intent(this, MainActivity.class);
             i.putExtra("key",guest_flag);
             startActivity(i);
@@ -110,18 +112,18 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
         facebookBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                // Handle login success
                 AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
                 firebaseAuth.signInWithCredential(credential)
-                        .addOnSuccessListener(authResult ->   {
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        .addOnSuccessListener(authResult -> {
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
                             if (user != null) {
                                 String uid = user.getUid();
                                 SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
-                                prefs.edit().putString("USER_UID", uid).apply(); // ✅ Save UID
+                                prefs.edit().putString("USER_UID", uid).apply();
                             }
-
-                            gotoMain();
-            })
+                            gotoMain(); // Redirect to MainActivity
+                        })
                         .addOnFailureListener(e -> toast("Facebook sign-in failed."));
             }
 
@@ -135,7 +137,6 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
                 toast("Facebook error: " + error.getMessage());
             }
         });
-
 
     }
 
@@ -201,7 +202,7 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
                         if (user != null) {
                             String uid = user.getUid(); // 🔑 Use UID
                             SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
-                            prefs.edit().putString("USER_UID", uid).apply(); // ✅ Save UID
+                            prefs.edit().putString("USER_UID", uid).apply(); 
                         }
 
                         startActivity(new Intent(this, MainActivity.class));

@@ -2,6 +2,7 @@ package com.example.foodplanner.planner.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
     private CalendarView calendarView;
     private LottieAnimationView noMealsAnimation;
     private TextView noMealsText;
+    private String userId;
     private Calendar selectedCalendar = Calendar.getInstance();
     private final SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
 
@@ -93,9 +95,17 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
 
             return false;
         });
+        SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
+        String userId = prefs.getString("USER_UID", null);
 
-        presenter = new PlannerPresenterImpl(this, new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)));
 
+        MealsRepositoryImpl repository = new MealsRepositoryImpl(
+                MealsRemoteDataSourceImpl.getInstance(),
+                MealsLocalDataSourceImpl.getInstance(this)
+        );
+        repository.setCurrentUserId(userId);
+
+        presenter = new PlannerPresenterImpl(this, repository, userId);
         // Limit calendar to current week
         Calendar minDateCalendar = Calendar.getInstance();
         calendarView.setMinDate(minDateCalendar.getTimeInMillis());
