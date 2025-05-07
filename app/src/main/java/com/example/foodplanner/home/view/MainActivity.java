@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
                 if (value == 1 ) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Login Required");
-                    builder.setMessage("You need to log in to access favorites. Would you like to log in now?");
+                    builder.setMessage("You need to log in to access Planned. Would you like to log in now?");
                     builder.setPositiveButton("Log In", (dialog, which) -> {
                         // Redirect to LoginActivity
                         startActivity(new Intent(this, LoginActivity.class));
@@ -177,10 +177,14 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
                         return true;
                     }
             } else if (id == R.id.navigation_profile) {
-                startActivity(new Intent(this, ProfileActivity.class));
+                Intent intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra("key", 1); // guest
+                startActivity(intent);
                 return true;
             } else if (id == R.id.navigation_search) {
-                startActivity(new Intent(this, SearchActivity.class));
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra("key", 1); // guest
+                startActivity(intent);
                 return true;
             }
 

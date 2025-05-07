@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -19,6 +20,7 @@ import com.example.foodplanner.profile.presenter.ProfilePresenterImpl;
 import com.example.foodplanner.search.view.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
@@ -26,6 +28,8 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     private Button btnFavorites, btnPlanner, btnLogout;
     private LottieAnimationView animationView;
     private ProfilePresenter presenter;
+
+    int value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,9 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         btnLogout = findViewById(R.id.btn_logout);
         animationView = findViewById(R.id.profile_animation);
 
-        String userName = "Guest"; // or retrieve from Firebase/Auth
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userName = (user != null && user.getDisplayName() != null) ? user.getDisplayName() : "Guest";
+
         presenter = new ProfilePresenterImpl(this, userName);
         presenter.onViewLoaded();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
@@ -47,19 +53,53 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
 
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                value = extras.getInt("key");
+            }
+
             if (id == R.id.navigation_profile) {
                 return true; // Stay here
             } else if (id == R.id.navigation_favorites) {
-                startActivity(new Intent(this, FavoritesActivity.class));
-                return true;
+                if (value == 1 ){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Login Required");
+                    builder.setMessage("You need to log in to access favorites. Would you like to log in now?");
+                    builder.setPositiveButton("Log In", (dialog, which) -> {
+                        // Redirect to LoginActivity
+                        startActivity(new Intent(this, LoginActivity.class));
+                    });
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                    builder.create().show();
+                    return true;
+
+                }else {
+                    startActivity(new Intent(this, FavoritesActivity.class));
+                    return true;
+                }
             } else if (id == R.id.navigation_planner) {
-                startActivity(new Intent(this, PlannerActivity.class));
-                return true;
+                if (value == 1 ) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Login Required");
+                    builder.setMessage("You need to log in to access Planned. Would you like to log in now?");
+                    builder.setPositiveButton("Log In", (dialog, which) -> {
+                        // Redirect to LoginActivity
+                        startActivity(new Intent(this, LoginActivity.class));
+                    });
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                    builder.create().show();
+                    return true;
+                } else{
+                    startActivity(new Intent(this, PlannerActivity.class));
+                    return true;
+                }
             } else if (id == R.id.navigation_home) {
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
             } else if (id == R.id.navigation_search) {
-                startActivity(new Intent(this, SearchActivity.class));
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra("key", 1); // guest
+                startActivity(intent);
                 return true;
             }
 
@@ -78,15 +118,41 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     }
 
     @Override
-    public void navigateToFavorites() {
-        startActivity(new Intent(this, FavoritesActivity.class));
+    public void navigateToFavorites() {;
+        if (value == 1 ) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Login Required");
+            builder.setMessage("You need to log in to access favorites. Would you like to log in now?");
+            builder.setPositiveButton("Log In", (dialog, which) -> {
+                // Redirect to LoginActivity
+                startActivity(new Intent(this, LoginActivity.class));
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+            builder.create().show();
+
+        }else {
+            startActivity(new Intent(this, FavoritesActivity.class));
+        }
     }
 
     @Override
     public void navigateToPlanner() {
-        startActivity(new Intent(this, PlannerActivity.class));
-    }
+        if (value == 1) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Login Required");
+            builder.setMessage("You need to log in to access Planner. Would you like to log in now?");
+            builder.setPositiveButton("Log In", (dialog, which) -> {
+                // Redirect to LoginActivity
+                startActivity(new Intent(this, LoginActivity.class));
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+            builder.create().show();
 
+        } else {
+
+            startActivity(new Intent(this, PlannerActivity.class));
+        }
+    }
     @Override
     public void logout() {
         FirebaseAuth.getInstance().signOut();

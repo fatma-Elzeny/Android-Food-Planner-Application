@@ -15,6 +15,7 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.SignUP.view.SignUpActivity;
 import com.example.foodplanner.mainLogin.presenter.MainLoginPresenter;
 import com.example.foodplanner.mainLogin.presenter.MainLoginPresenterImpl;
+import com.example.foodplanner.profile.view.ProfileActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -85,7 +86,6 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
             Intent i = new Intent(this, MainActivity.class);
             i.putExtra("key",guest_flag);
             startActivity(i);
-
         });
         googleBtn.setOnClickListener(view -> {
             Intent signInIntent = googleSignInClient.getSignInIntent();

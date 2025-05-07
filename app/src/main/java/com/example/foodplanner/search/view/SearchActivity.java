@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import com.example.foodplanner.NoInternetDialog;
 import com.example.foodplanner.R;
 import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.home.view.MainActivity;
+import com.example.foodplanner.mainLogin.view.LoginActivity;
 import com.example.foodplanner.model.Category;
 import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
@@ -43,6 +45,7 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
     private List<Meal> mealList = new ArrayList<>();
 
     private ProgressBar progressBar2;
+    int value ;
     private final String[] searchOptions = {"Meal", "Countries", "Categories", "Ingredients"};
 
     @Override
@@ -142,15 +145,47 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                value = extras.getInt("key");
+            }
 
             if (id == R.id.navigation_search) {
                 return true; // Stay here
             } else if (id == R.id.navigation_favorites) {
-                startActivity(new Intent(this, FavoritesActivity.class));
-                return true;
+                if (value == 1 ){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Login Required");
+                    builder.setMessage("You need to log in to access favorites. Would you like to log in now?");
+                    builder.setPositiveButton("Log In", (dialog, which) -> {
+                        // Redirect to LoginActivity
+                        startActivity(new Intent(this, LoginActivity.class));
+                    });
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                    builder.create().show();
+                    return true;
+
+                }else {
+                    startActivity(new Intent(this, FavoritesActivity.class));
+                    return true;
+                }
             } else if (id == R.id.navigation_planner) {
-                startActivity(new Intent(this, PlannerActivity.class));
-                return true;
+                if (value == 1 ){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Login Required");
+                    builder.setMessage("You need to log in to access planner. Would you like to log in now?");
+                    builder.setPositiveButton("Log In", (dialog, which) -> {
+                        // Redirect to LoginActivity
+                        startActivity(new Intent(this, LoginActivity.class));
+                    });
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                    builder.create().show();
+                    return true;
+
+                }else {
+                    startActivity(new Intent(this, PlannerActivity.class));
+                    return true;
+                }
             } else if (id == R.id.navigation_profile) {
                 startActivity(new Intent(this, ProfileActivity.class));
                 return true;
