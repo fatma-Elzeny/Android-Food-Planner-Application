@@ -238,6 +238,12 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
     public Context getContext() {
         return this; // Activity is a Context subclass
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, 0);
+    }
 }
 
 

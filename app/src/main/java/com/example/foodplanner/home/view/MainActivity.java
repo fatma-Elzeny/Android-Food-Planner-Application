@@ -20,7 +20,6 @@ import com.example.foodplanner.profile.view.ProfileActivity;
 import com.example.foodplanner.R;
 
 import android.content.Intent;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         presenter.getAllCategories();
         presenter.getAllAreas();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             int value =0 ;
@@ -330,5 +329,10 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     @Override
     public void showEmptyState(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, 0);
     }
 }

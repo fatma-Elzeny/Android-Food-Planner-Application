@@ -187,10 +187,15 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
                     return true;
                 }
             } else if (id == R.id.navigation_profile) {
-                startActivity(new Intent(this, ProfileActivity.class));
+                Intent intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra("key", value); // guest
+                startActivity(intent);
+
                 return true;
             } else if (id == R.id.navigation_home) {
-                startActivity(new Intent(this, MainActivity.class));
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("key", value); // guest
+                startActivity(intent);
                 return true;
             }
 
@@ -265,5 +270,10 @@ public class SearchActivity extends AppCompatActivity implements SearchScreen ,S
     @Override
     public void showError(String errorMessage) {
         Toast.makeText(this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, 0);
     }
 }

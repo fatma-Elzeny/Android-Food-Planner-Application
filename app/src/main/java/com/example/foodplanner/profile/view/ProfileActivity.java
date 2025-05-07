@@ -96,6 +96,9 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
                 }
             } else if (id == R.id.navigation_home) {
                 startActivity(new Intent(this, MainActivity.class));
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("key", value); // guest
+                startActivity(intent);
                 return true;
             } else if (id == R.id.navigation_search) {
                 Intent intent = new Intent(this, SearchActivity.class);
@@ -171,5 +174,10 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     protected void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, 0);
     }
 }

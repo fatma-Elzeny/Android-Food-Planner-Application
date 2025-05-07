@@ -1,68 +1,186 @@
-# Android-Food-Planner-Application
-**Food Planner Android App** project using the **MVP design pattern**:
+#  Food Planner Android App
+
+A smart and user-centric mobile application to plan, organize, and explore meals using a modern Android tech stack. The app supports searching meals by category, area, or ingredient, saving favorites and meal planning, with user-specific data handling for personalized experience.
 
 ---
 
-## 🍱 Food Planner App
+## Architecture
 
-An Android mobile application that helps users plan their weekly meals. Built using Java, MVP architecture, and TheMealDB public API.
+This app uses the **Model-View-Presenter (MVP)** architecture, cleanly separating business logic, UI logic, and data handling.
 
----
-
-### 🚀 Features
-
-- 🥘 **Meal of the Day** — Random meal for daily inspiration  
-- 🔍 **Search Meals** — By name, category, country, or ingredient  
-- 📂 **Browse Categories & Countries** — Discover global cuisines  
-- ❤️ **Favorites** — Save meals to local database (Room)  
-- 🗓️ **Weekly Planner** — Add meals to your weekly plan  
-- 🔐 **Authentication** — Firebase login (Email, Google, Facebook)  
-- 📡 **Offline Support** — View favorites and plans without internet  
-- 🎬 **Meal Details** — Name, image, ingredients, instructions & embedded video  
-- 🎉 **Splash Screen** — Lottie animation  
-- 📆 *(Bonus)* Add meals to device calendar
-
----
-
-### 🧠 Architecture
-
-The app follows the **MVP (Model - View - Presenter)** design pattern for better separation of concerns.
-
-```
-com.foodplannerapp
-├── model           // Data models (Meal, Category, etc.)
-├── view            // Activities & Fragments
-├── presenter       // Business logic layer
-├── data
-│   ├── local       // Room DB
-│   └── remote      // Retrofit & Firebase
-├── utils           // SharedPrefs, Constants, Helpers
-├── network         // Retrofit setup & Network callbacks
+```plaintext
+View (Activity/Fragment) <--> Presenter <--> Repository <--> Data Sources (Remote / Local)
 ```
 
----
+###  Layered Structure
 
-### 🔧 Tech Stack
-
-- **Java**
-- **Retrofit** (TheMealDB API)
-- **Room Database**
-- **Firebase Auth**
-- **Lottie Animation**
-- **Glide** (Image loading)
-- **MVP Architecture**
-
+- **View** – Displays data and delegates user actions.
+- **Presenter** – Handles business logic and coordinates View <-> Repository communication.
+- **Repository** – Abstracts data source access, decides whether to fetch from network or database.
+- **Remote Data Source** – Fetches data from TheMealDB API.
+- **Local Data Source** – Persists data locally using Room (Favorites, Planned Meals).
+- **Models** – POJOs (e.g. Meal, Category, Country).
 
 ---
 
+##  Features
 
-### 📌 Project Milestones
-
-- ✔️ UI Mockups (Figma / Adobe XD)  
-- ✔️ Retrofit and Firebase integration  
-- ✔️ Offline Room DB + SharedPreferences
-- ✔️ MVP structure for all major features  
-- ✔️ Trello for task tracking  
+| Feature              | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| Search               | Search meals by name, ingredient, category, or area.                        |
+| Favorites            | Mark meals as favorites; favorites are stored per user.                     |
+| Meal Planner         | Plan meals for days in the current week only.                               |
+| Meal of the Day      | Displays a randomly fetched meal.                                           |
+| Filter by Area       | Show meals based on selected country or area.                               |
+| Filter by Category   | Show meals based on selected category.                                      |
+| User Authentication  | Google / Facebook / Guest login.                                            |
+| MVP Architecture     | Clean separation of concerns and testability.                               |
+| User-specific data   | All planned and favorite meals are scoped to the authenticated user.       |
 
 ---
+
+##  Tech Stack
+
+| Technology         | Purpose                                  |
+|--------------------|-------------------------------------------|
+| Kotlin / Java      | Android development                       |
+| MVP                | Presentation architecture pattern         |
+| Retrofit2          | API Communication                         |
+| Room               | Local database (Favorites, Planner)       |
+| LiveData           | Observable UI updates                     |
+| Firebase Auth      | Login (Email, Google, Facebook)           |
+| Glide              | Image loading                             |
+| ConstraintLayout   | Modern responsive UI                      |
+| SharedPreferences  | Persist user identity                     |
+
+---
+## UMLs (Relation between Different classes)
+
+![Subdirectory Image](images/MainLoginUML.png)
+![Subdirectory Image](images/SignUpUMl.png)
+![Subdirectory Image](images/AuthLogin.png)
+![Subdirectory Image](images/DataFlowUML.png)
+![Subdirectory Image](images/HomeUML.png)
+![Subdirectory Image](images/MealDetailUML.png)
+![Subdirectory Image](images/FavUML.png)
+![Subdirectory Image](images/PlanUML.png)
+![Subdirectory Image](images/ProfileUML.png)
+![Subdirectory Image](images/SearchUML.png)
+---
+##  Sequence Diagram – Favorites
+
+```plaintext
+User taps Favorite icon
+        |
+        v
+Presenter.addToFavorites(meal)
+        |
+        v
+Repository.insertFavorite(meal)
+        |
+        v
+LocalDataSource.insertMeal(meal) ---> Room Database (with userId)
+```
+
+---
+
+## Sequence Diagram – Meal Planning
+
+```plaintext
+User selects day from calendar
+        |
+        v
+Presenter.loadMealsForDay(day)
+        |
+        v
+Repository.getMealsByDay(userId, day)
+        |
+        v
+Room Query WHERE day = :day AND userId = :userId
+        |
+        v
+LiveData<List<PlannedMeal>> -> View
+```
+
+---
+## User-Specific Data
+
+- **SharedPreferences** stores the currently authenticated user's Firebase UID:
+  
+```java
+SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
+prefs.edit().putString("USER_UID", uid).apply();
+```
+
+- **FavoriteMeal & PlannedMeal models** include a `userId` field for scoping.
+
+- **Room DAO queries** are filtered by `userId`:
+  
+```sql
+SELECT * FROM favorite_meals WHERE userId = :userId
+```
+
+---
+
+## Folder Structure
+
+```plaintext
+com.example.foodplanner/
+│
+├── db/
+│   ├── local/         # Room, DAOs, Entities
+│  
+ ── network/
+│   ├── remote/        # Retrofit, APIs
+│   
+├── ui/
+│   ├── home/
+│   ├── favorites/
+│   ├── planner/
+│   ├── profile/
+│   └── search/
+│
+├── models/
+     └── repository/    # MealsRepository
+     └── POJOs/
+├── utils/
+
+```
+
+---
+
+##  Installation & Setup
+
+1. Clone this repo:
+   ```bash
+   git clone https://github.com/your-username/FoodPlannerApp.git
+   ```
+
+2. Add your **Firebase project** credentials:
+   - `google-services.json` in `app/`
+   - Configure Facebook App ID and OAuth settings.
+
+3. Run the app:
+   - Use Android Studio.
+   - Minimum SDK: 21.
+
+---
+
+## Testing & Debugging Tips
+
+- Use **`adb shell pm clear com.example.foodplanner`** to simulate fresh install.
+- Ensure **Firebase UID** is saved in `SharedPreferences` after login.
+- Watch `Logcat` for Room/Retrofit logs using custom tags.
+
+---
+
+## TODOs & Enhancements
+
+- [ ] Add offline caching for meals.
+- [ ] Add weekly meal export/share.
+- [ ] Allow calorie tracking for planned meals.
+- [ ] Add onboarding screen.
+
+---
+
 

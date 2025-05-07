@@ -158,5 +158,9 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         });
 
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(0, 0);
+    }
 }
