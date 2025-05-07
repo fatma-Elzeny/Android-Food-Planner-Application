@@ -1,6 +1,7 @@
 package com.example.foodplanner.profile.view;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -156,6 +157,12 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     @Override
     public void logout() {
         FirebaseAuth.getInstance().signOut();
+        com.facebook.login.LoginManager.getInstance().logOut();
+
+        // 3. Clear user preferences
+        SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
+        prefs.edit().remove("USER_UID").apply();
+
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }

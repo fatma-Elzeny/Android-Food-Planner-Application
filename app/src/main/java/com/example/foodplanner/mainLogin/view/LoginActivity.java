@@ -202,7 +202,7 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
                         if (user != null) {
                             String uid = user.getUid(); // 🔑 Use UID
                             SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
-                            prefs.edit().putString("USER_UID", uid).apply(); 
+                            prefs.edit().putString("USER_UID", uid).apply();
                         }
 
                         startActivity(new Intent(this, MainActivity.class));
