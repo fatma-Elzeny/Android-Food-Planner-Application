@@ -57,12 +57,15 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        FacebookSdk.setApplicationId(getString(R.string.facebook_app_id));
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         mainLoginPresenter = new MainLoginPresenterImpl(this);
         initializeUIComponents();
         configureGoogleSignIn();
         setupButtonListeners();
         setupFacebookLogin();
+        mainLoginPresenter.checkExistingUser();
     }
 
     private void initializeUIComponents() {
@@ -105,6 +108,7 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
     private void setupFacebookLogin() {
         LoginButton facebookBtn = findViewById(R.id.btn_facebook);
         facebookBtn.setLoginText("Continue with Facebook");
+        facebookBtn.setPermissions("email", "public_profile");
         callbackManager = CallbackManager.Factory.create();
 
         facebookBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -167,6 +171,7 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
     public void persistUser(String uid) {
         SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
         prefs.edit().putString("USER_UID", uid).apply();
+
     }
     // endregion
 

@@ -51,6 +51,15 @@ public class MainLoginPresenterImpl implements MainLoginPresenter {
                 });
     }
 
+    @Override
+    public void checkExistingUser() {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            view.persistUser(currentUser.getUid());
+            view.onLoginSuccess();
+        }
+    }
+
     private void handleUserPersistence() {
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {

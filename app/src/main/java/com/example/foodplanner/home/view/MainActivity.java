@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
     private static final String KEY_MEAL_JSON = "meal_json";
     private static final String KEY_SAVED_TIME = "saved_time";
 
+    int value =0 ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            int value =0 ;
+
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 value = extras.getInt("key");
@@ -244,6 +246,7 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         // Handle click
         Intent intent = new Intent(MainActivity.this, MealDetailsActivity.class);
         intent.putExtra("MEAL_ID", meal.getIdMeal());
+        intent.putExtra("key", value); // guest
         startActivity(intent);
     }
 
@@ -275,7 +278,9 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
         mealImage.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, MealDetailsActivity.class);
             intent.putExtra("MEAL_ID", meal.getIdMeal());
+            intent.putExtra("key", value); // guest
             startActivity(intent);
+
         });
     }
 

@@ -1,6 +1,7 @@
 package com.example.foodplanner.MealDetail.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,8 @@ import com.example.foodplanner.MealDetail.presenter.MealDetailPresenterImpl;
 import com.example.foodplanner.NetworkUtil;
 import com.example.foodplanner.R;
 import com.example.foodplanner.db.MealsLocalDataSourceImpl;
+import com.example.foodplanner.home.view.MainActivity;
+import com.example.foodplanner.mainLogin.view.LoginActivity;
 import com.example.foodplanner.model.FavoriteMeal;
 import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
@@ -53,6 +56,7 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
     private YouTubePlayerView youtubePlayerView;
     private RecyclerView ingredientsRecycler;
     private Calendar selectedCalendar = Calendar.getInstance();
+    int value =0 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,21 +83,54 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         btnFavorite = findViewById(R.id.btn_add_favorite);
         btnPlanner = findViewById(R.id.btn_add_planner);
 
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            value = extras.getInt("key");
+        }
         btnFavorite.setOnClickListener(v -> {
-            if (currentMeal != null) {
-                FavoriteMeal fav = new FavoriteMeal();
-                fav.setIdMeal(currentMeal.getIdMeal());
-                fav.setStrMeal(currentMeal.getStrMeal());
-                fav.setStrMealThumb(currentMeal.getStrMealThumb());
-                fav.setUserId(currentMeal.getUserId());
-                new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)).insertFavorite(fav);
-                Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
+            if (value == 1 ){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Login Required");
+                builder.setMessage("You need to log in to access favorites. Would you like to log in now?");
+                builder.setPositiveButton("Log In", (dialog, which) -> {
+                    // Redirect to LoginActivity
+                    startActivity(new Intent(this, LoginActivity.class));
+                });
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                builder.create().show();
+
+
+            }else {
+                if (currentMeal != null) {
+                    FavoriteMeal fav = new FavoriteMeal();
+                    fav.setIdMeal(currentMeal.getIdMeal());
+                    fav.setStrMeal(currentMeal.getStrMeal());
+                    fav.setStrMealThumb(currentMeal.getStrMealThumb());
+                    fav.setUserId(currentMeal.getUserId());
+                    new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)).insertFavorite(fav);
+                    Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         btnPlanner.setOnClickListener(v -> {
-            if (currentMeal != null) {
-                showPlannerCalendarDialog();
+            if (value == 1 ){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Login Required");
+                builder.setMessage("You need to log in to access planner. Would you like to log in now?");
+                builder.setPositiveButton("Log In", (dialog, which) -> {
+                    // Redirect to LoginActivity
+                    startActivity(new Intent(this, LoginActivity.class));
+                });
+                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                builder.create().show();
+
+
+            }else {
+                if (currentMeal != null) {
+                    showPlannerCalendarDialog();
+                }
             }
         });
 
@@ -205,5 +242,15 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         super.onDestroy();
         youtubePlayerView.release();
         presenter.onDestroy();
+    }
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
     }
 }
