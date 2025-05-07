@@ -13,13 +13,11 @@ public class PlannedMeal {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-
     private String mealId;
     private String mealName;
     private String mealThumb;
     private String day;
     private String date;
-
     public void setDate(String date) {
         this.date = date;
     }

@@ -136,15 +136,46 @@ public class MainActivity extends AppCompatActivity implements HomeView,OnMealCl
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-
+            int value =0 ;
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                value = extras.getInt("key");
+            }
             if (id == R.id.navigation_home) {
                 return true; // Stay here
             } else if (id == R.id.navigation_favorites) {
-                startActivity(new Intent(this, FavoritesActivity.class));
-                return true;
+                if (value == 1 ){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Login Required");
+                    builder.setMessage("You need to log in to access favorites. Would you like to log in now?");
+                    builder.setPositiveButton("Log In", (dialog, which) -> {
+                        // Redirect to LoginActivity
+                        startActivity(new Intent(this, LoginActivity.class));
+                    });
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                    builder.create().show();
+                    return true;
+
+                }else {
+                    startActivity(new Intent(this, FavoritesActivity.class));
+                    return true;
+                }
             } else if (id == R.id.navigation_planner) {
-                startActivity(new Intent(this, PlannerActivity.class));
-                return true;
+                if (value == 1 ) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Login Required");
+                    builder.setMessage("You need to log in to access favorites. Would you like to log in now?");
+                    builder.setPositiveButton("Log In", (dialog, which) -> {
+                        // Redirect to LoginActivity
+                        startActivity(new Intent(this, LoginActivity.class));
+                    });
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                    builder.create().show();
+                    return true;
+                } else{
+                        startActivity(new Intent(this, PlannerActivity.class));
+                        return true;
+                    }
             } else if (id == R.id.navigation_profile) {
                 startActivity(new Intent(this, ProfileActivity.class));
                 return true;

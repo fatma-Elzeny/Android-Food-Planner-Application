@@ -48,19 +48,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
                     });
         }
 
-        @Override
-        public void loginAsGuest() {
-            view.showLoading();
-            auth.signInAnonymously()
-                    .addOnCompleteListener(task -> {
-                        view.hideLoading();
-                        if (task.isSuccessful()) {
-                            view.onLoginSuccess();
-                        } else {
-                            view.onLoginFailure(task.getException().getMessage());
-                        }
-                    });
-        }
+
     }
 
 

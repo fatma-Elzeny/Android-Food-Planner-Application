@@ -3,6 +3,7 @@ package com.example.foodplanner.Favorite.view;
 import androidx.lifecycle.LiveData;
 
 import com.example.foodplanner.model.FavoriteMeal;
+import com.example.foodplanner.model.Meal;
 
 import java.util.List;
 

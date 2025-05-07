@@ -1,6 +1,8 @@
 package com.example.foodplanner.db;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -10,6 +12,8 @@ import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.PlannedMeal;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     private FavoriteMealDao favoriteMealDao;
@@ -18,6 +22,8 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
     private LiveData<List<FavoriteMeal>> storedMeals;
 
     private LiveData<List<Meal>> plannedMeals;
+
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public MealsLocalDataSourceImpl(Context context) {
 
@@ -101,4 +107,7 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
             }
         }).start();
     }
+
+
 }
+

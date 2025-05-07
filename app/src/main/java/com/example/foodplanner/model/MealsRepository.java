@@ -2,6 +2,7 @@ package com.example.foodplanner.model;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.foodplanner.db.LocalCallback;
 import com.example.foodplanner.network.NetworkCallback;
 
 import java.util.List;

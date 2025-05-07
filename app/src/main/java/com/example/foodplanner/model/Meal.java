@@ -43,6 +43,7 @@ public class Meal {
         this.strFlag = strFlag;
     }
 
+
     private String strIngredient1;
     private String strMeasure1;
     private String strIngredient2;

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.foodplanner.R;
 import com.example.foodplanner.home.view.OnMealClickListener;
 import com.example.foodplanner.model.FavoriteMeal;
+import com.example.foodplanner.model.Meal;
 
 import java.util.List;
 

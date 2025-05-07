@@ -20,6 +20,7 @@ public interface MealsLocalDataSource {
 
     void deleteMeal(FavoriteMeal meal);
 
+
     // planned meals
     LiveData<List<PlannedMeal>> getPlannedFood(String date);
     void insertFoodPlan(PlannedMeal foodPlan);

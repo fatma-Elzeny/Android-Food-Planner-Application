@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.example.foodplanner.model.FavoriteMeal;
+import com.example.foodplanner.model.Meal;
 
 import java.util.List;
 
@@ -21,5 +22,7 @@ public interface FavoriteMealDao {
     @Query("SELECT * FROM favorite_meals")
     LiveData<List<FavoriteMeal>> getAllFavorites();
 
+    @Query("SELECT * FROM favorite_meals WHERE idMeal = :mealId")
+    Meal getFavoriteById(String mealId);
 
 }

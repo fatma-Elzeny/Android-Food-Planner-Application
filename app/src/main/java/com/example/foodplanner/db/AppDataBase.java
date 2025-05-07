@@ -13,7 +13,7 @@ import com.example.foodplanner.model.PlannedMeal;
 
 @Database(
         entities = {FavoriteMeal.class, PlannedMeal.class,Meal.class},
-        version = 1
+        version =3
 )
 
 public abstract class AppDataBase extends RoomDatabase {
@@ -27,6 +27,7 @@ public abstract class AppDataBase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDataBase.class, "food_database")
+                   .fallbackToDestructiveMigration()
                     .build();
         }
         return instance;

@@ -10,7 +10,6 @@ import com.example.foodplanner.model.PlannedMeal;
 import com.example.foodplanner.planner.view.PlannerView;
 
 import java.util.List;
-import java.util.concurrent.Executors;
 
 public class PlannerPresenterImpl implements PlannerPresenter {
     private final PlannerView view;
@@ -41,4 +40,5 @@ public class PlannerPresenterImpl implements PlannerPresenter {
         repository.deletePlannedMeal(meal);
         loadMealsForDay(meal.getDay());
     }
+
 }

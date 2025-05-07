@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
     private TextView btnLogin ;
     private CallbackManager callbackManager;
 
-
+    int guest_flag = 0 ;
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,11 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
         btnLogin.setOnClickListener(v -> loginUser());
         btnSignUp.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
         btnGuest.setOnClickListener(v -> {
-            mainLoginPresenter.loginAsGuest();
+            guest_flag= 1;
+            Intent i = new Intent(this, MainActivity.class);
+            i.putExtra("key",guest_flag);
+            startActivity(i);
+
         });
         googleBtn.setOnClickListener(view -> {
             Intent signInIntent = googleSignInClient.getSignInIntent();
@@ -89,7 +93,7 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
         });
 
         // Auto-login if already authenticated
-   /*   if (firebaseAuth.getCurrentUser() != null) {
+  /*   if (firebaseAuth.getCurrentUser() != null) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }*/

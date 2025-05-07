@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.foodplanner.Favorite.view.FavoritesView;
 import com.example.foodplanner.model.FavoriteMeal;
+import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepository;
 
 import java.util.List;

@@ -1,6 +1,9 @@
 package com.example.foodplanner.planner.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +12,7 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -48,6 +52,8 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
     private TextView noMealsText;
     private Calendar selectedCalendar = Calendar.getInstance();
     private final SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,6 +203,11 @@ public class PlannerActivity extends AppCompatActivity implements PlannerView, O
     @Override
     public void showError(String message) {
         runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public Context getContext() {
+        return this; // Activity is a Context subclass
     }
 }
 

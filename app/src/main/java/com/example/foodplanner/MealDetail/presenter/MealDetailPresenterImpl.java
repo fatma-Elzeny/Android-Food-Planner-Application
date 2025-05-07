@@ -1,6 +1,9 @@
 package com.example.foodplanner.MealDetail.presenter;
 
 import com.example.foodplanner.MealDetail.view.MealDetailsView;
+import com.example.foodplanner.NetworkUtil;
+import com.example.foodplanner.db.LocalCallback;
+import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealResponse;
 import com.example.foodplanner.model.MealsRepository;
 import com.example.foodplanner.network.NetworkCallback;

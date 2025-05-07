@@ -25,6 +25,7 @@ import com.example.foodplanner.R;
 import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.model.FavoriteMeal;
+import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.example.foodplanner.planner.view.PlannerActivity;
@@ -40,8 +41,8 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     private RecyclerView recyclerView;
     private FavoritesAdapter adapter;
 
-   private TextView no_fav_text;
-   private LottieAnimationView no_fav_animation;
+    private TextView no_fav_text;
+    private LottieAnimationView no_fav_animation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +148,5 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
         });
 
     }
-
 
 }
