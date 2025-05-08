@@ -149,23 +149,6 @@ com.example.foodplanner/
 
 ---
 
-##  Installation & Setup
-
-1. Clone this repo:
-   ```bash
-   git clone https://github.com/your-username/FoodPlannerApp.git
-   ```
-
-2. Add your **Firebase project** credentials:
-   - `google-services.json` in `app/`
-   - Configure Facebook App ID and OAuth settings.
-
-3. Run the app:
-   - Use Android Studio.
-   - Minimum SDK: 21.
-
----
-
 ## Testing & Debugging Tips
 
 - Use **`adb shell pm clear com.example.foodplanner`** to simulate fresh install.
