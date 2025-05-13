@@ -44,14 +44,15 @@ public class SignUpPresenterImpl implements SignUpPresenter{
 
                             user.updateProfile(profileUpdates).addOnCompleteListener(profileTask -> {
                                 if (profileTask.isSuccessful()) {
-                                    view.showSignUpSuccess(userName,foodPref);
+                                    view.persistUser(user.getUid()); // Save UID to SharedPreferences
+                                    view.showSignUpSuccess(userName, foodPref);
                                 } else {
-                                    view.showSignUpError("Failed to update user profile");
+                                    view.showSignUpError("Failed to update profile");
                                 }
                             });
                         }
                     } else {
-                        view.showSignUpError(task.getException() != null ? task.getException().getMessage() : "Sign-up failed");
+                        view.showSignUpError(task.getException().getMessage());
                     }
                 });
     }

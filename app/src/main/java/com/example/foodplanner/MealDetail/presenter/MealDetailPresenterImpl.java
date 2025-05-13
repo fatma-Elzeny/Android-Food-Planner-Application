@@ -1,5 +1,7 @@
 package com.example.foodplanner.MealDetail.presenter;
 
+import androidx.lifecycle.LifecycleOwner;
+
 import com.example.foodplanner.MealDetail.view.MealDetailsView;
 import com.example.foodplanner.NetworkUtil;
 import com.example.foodplanner.db.LocalCallback;

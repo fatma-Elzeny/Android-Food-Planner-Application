@@ -45,5 +45,8 @@ public interface MealsRepository {
 
     void updatePlannedMeal(PlannedMeal plannedMeal);
 
+    LiveData<FavoriteMeal> getFavoriteMealById(String mealId);
+    LiveData<PlannedMeal> getPlannedMealById(String mealId);
+
 
 }

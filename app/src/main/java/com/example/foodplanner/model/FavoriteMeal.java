@@ -14,7 +14,36 @@ public class FavoriteMeal {
     private String strArea;
     private String strMealThumb;
 
+    public String getStrIngredientsJson() {
+        return strIngredientsJson;
+    }
+
+    public String getStrYoutube() {
+        return strYoutube;
+    }
+
+    public void setStrInstructions(String strInstructions) {
+        this.strInstructions = strInstructions;
+    }
+
+    public void setStrIngredientsJson(String strIngredientsJson) {
+        this.strIngredientsJson = strIngredientsJson;
+    }
+
+    public void setStrYoutube(String strYoutube) {
+        this.strYoutube = strYoutube;
+    }
+
+    public String getStrInstructions() {
+        return strInstructions;
+    }
+
     private String userId;
+    private String strInstructions;
+    private String strYoutube;
+    private String strIngredientsJson; // JSON list of IngredientItem
+
+
 
     public void setUserId(String userId) {
         this.userId = userId;

@@ -109,6 +109,15 @@ public class MealsLocalDataSourceImpl implements MealsLocalDataSource{
         }).start();
     }
 
+    @Override
+    public LiveData<FavoriteMeal> getFavoriteById(String mealId) {
+        return favoriteMealDao.getFavoriteById(mealId);
+    }
+
+    @Override
+    public LiveData<PlannedMeal> getPlannedById(String mealId) {
+        return plannedMealDao.getPlannedMealById(mealId);
+    }
 
 }
 

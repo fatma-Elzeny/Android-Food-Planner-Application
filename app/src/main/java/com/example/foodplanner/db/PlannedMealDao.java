@@ -28,4 +28,8 @@ public interface PlannedMealDao {
 
     @Update
     void updatePlannedMeals(PlannedMeal plannedMeal);
+
+    @Query("SELECT * FROM planned_meals WHERE mealId = :mealId")
+    LiveData<PlannedMeal> getPlannedMealById(String mealId);
+
 }

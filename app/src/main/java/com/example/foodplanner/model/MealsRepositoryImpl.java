@@ -122,6 +122,15 @@ public class MealsRepositoryImpl implements MealsRepository {
 
     }
 
+    @Override
+    public LiveData<FavoriteMeal> getFavoriteMealById(String mealId) {
+        return mealLocalDataSource.getFavoriteById(mealId);
+    }
+
+    @Override
+    public LiveData<PlannedMeal> getPlannedMealById(String mealId) {
+        return mealLocalDataSource.getPlannedById(mealId);
+    }
 
 
 

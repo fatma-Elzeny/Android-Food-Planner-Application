@@ -1,5 +1,7 @@
 package com.example.foodplanner.MealDetail.view;
 
+import static android.view.View.GONE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -33,6 +35,7 @@ import com.example.foodplanner.model.Meal;
 import com.example.foodplanner.model.MealsRepositoryImpl;
 import com.example.foodplanner.model.PlannedMeal;
 import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
+import com.google.gson.Gson;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -88,50 +91,31 @@ public class MealDetailsActivity extends AppCompatActivity implements MealDetail
         if (extras != null) {
             value = extras.getInt("key");
         }
+
+        if (value ==1 ) {
+            btnFavorite.setVisibility(GONE);
+            btnPlanner.setVisibility(GONE);
+        }
         btnFavorite.setOnClickListener(v -> {
-            if (value == 1 ){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Login Required");
-                builder.setMessage("You need to log in to access favorites. Would you like to log in now?");
-                builder.setPositiveButton("Log In", (dialog, which) -> {
-                    // Redirect to LoginActivity
-                    startActivity(new Intent(this, LoginActivity.class));
-                });
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-                builder.create().show();
 
-
-            }else {
-                if (currentMeal != null) {
-                    FavoriteMeal fav = new FavoriteMeal();
-                    fav.setIdMeal(currentMeal.getIdMeal());
-                    fav.setStrMeal(currentMeal.getStrMeal());
-                    fav.setStrMealThumb(currentMeal.getStrMealThumb());
-                    fav.setUserId(currentMeal.getUserId());
-                    new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)).insertFavorite(fav);
-                    Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
-                }
+            if (currentMeal != null) {
+                FavoriteMeal fav = new FavoriteMeal();
+                fav.setIdMeal(currentMeal.getIdMeal());
+                fav.setStrMeal(currentMeal.getStrMeal());
+                fav.setStrMealThumb(currentMeal.getStrMealThumb());
+                fav.setUserId(currentMeal.getUserId());
+                new MealsRepositoryImpl(MealsRemoteDataSourceImpl.getInstance(), MealsLocalDataSourceImpl.getInstance(this)).insertFavorite(fav);
+                Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
             }
+
         });
 
         btnPlanner.setOnClickListener(v -> {
-            if (value == 1 ){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Login Required");
-                builder.setMessage("You need to log in to access planner. Would you like to log in now?");
-                builder.setPositiveButton("Log In", (dialog, which) -> {
-                    // Redirect to LoginActivity
-                    startActivity(new Intent(this, LoginActivity.class));
-                });
-                builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-                builder.create().show();
 
-
-            }else {
-                if (currentMeal != null) {
-                    showPlannerCalendarDialog();
-                }
+            if (currentMeal != null) {
+                showPlannerCalendarDialog();
             }
+
         });
 
         if (!NetworkUtil.isOnline(this)) {

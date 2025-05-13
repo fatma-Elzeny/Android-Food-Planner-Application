@@ -11,11 +11,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.foodplanner.AuthLogin.view.AuthLoginActivity;
+import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.R;
 import com.example.foodplanner.SignUP.view.SignUpActivity;
 import com.example.foodplanner.mainLogin.presenter.MainLoginPresenter;
 import com.example.foodplanner.mainLogin.presenter.MainLoginPresenterImpl;
+import com.example.foodplanner.model.MealsRepositoryImpl;
+import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 import com.example.foodplanner.profile.view.ProfileActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -158,6 +161,16 @@ public class LoginActivity extends AppCompatActivity implements mainLoginView {
 
     @Override
     public void onLoginSuccess() {
+        SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
+        String uid = prefs.getString("USER_UID", null);
+
+        // 🟢 Initialize repository with UID
+        MealsRepositoryImpl repository = new MealsRepositoryImpl(
+                MealsRemoteDataSourceImpl.getInstance(),
+                MealsLocalDataSourceImpl.getInstance(this)
+        );
+        repository.setCurrentUserId(uid);
+
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }

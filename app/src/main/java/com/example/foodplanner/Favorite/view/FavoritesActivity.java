@@ -144,12 +144,12 @@ public class FavoritesActivity extends AppCompatActivity implements FavoritesVie
     public void observeFavorites(LiveData<List<FavoriteMeal>> liveData) {
         liveData.observe(this, meals -> {
             if (meals == null || meals.isEmpty()) {
-                // 🔻 Show empty state
+                //  Show empty state
                 recyclerView.setVisibility(GONE);
                 no_fav_text.setVisibility(VISIBLE);
                 no_fav_animation.setVisibility(VISIBLE);
             } else {
-                // ✅ Show list
+                //  Show list
                 no_fav_text.setVisibility(GONE);
                 no_fav_animation.setVisibility(GONE);
                 recyclerView.setVisibility(VISIBLE);

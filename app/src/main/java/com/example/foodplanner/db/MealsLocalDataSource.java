@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface MealsLocalDataSource {
 
-
-
     // Favourite Meals
 
     void setCurrentUserId(String userId);
@@ -28,4 +26,8 @@ public interface MealsLocalDataSource {
     void insertFoodPlan(PlannedMeal foodPlan);
     void deleteFoodPlan(PlannedMeal foodPlan);
     void updateFoodPlan(PlannedMeal foodPlan);
+
+    LiveData<FavoriteMeal> getFavoriteById(String mealId);
+    LiveData<PlannedMeal> getPlannedById(String mealId);
+
 }

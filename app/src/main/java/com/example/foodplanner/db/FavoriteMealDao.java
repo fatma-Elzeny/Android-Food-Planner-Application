@@ -23,6 +23,6 @@ public interface FavoriteMealDao {
     @Query("SELECT * FROM favorite_meals WHERE userId = :userId")
     LiveData<List<FavoriteMeal>> getAllFavorites(String userId);
     @Query("SELECT * FROM favorite_meals WHERE idMeal = :mealId")
-    Meal getFavoriteById(String mealId);
+    LiveData<FavoriteMeal> getFavoriteById(String mealId);
 
 }

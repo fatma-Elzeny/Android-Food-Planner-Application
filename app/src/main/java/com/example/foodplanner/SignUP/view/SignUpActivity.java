@@ -2,24 +2,26 @@ package com.example.foodplanner.SignUP.view;
 
 
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.foodplanner.db.MealsLocalDataSourceImpl;
 import com.example.foodplanner.home.view.MainActivity;
 import com.example.foodplanner.R;
 import com.example.foodplanner.SignUP.presenter.SignUpPresenter;
 import com.example.foodplanner.SignUP.presenter.SignUpPresenterImpl;
+import com.example.foodplanner.model.MealsRepositoryImpl;
+import com.example.foodplanner.network.MealsRemoteDataSourceImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
 
 public class SignUpActivity extends AppCompatActivity implements SignUpView {
 
@@ -116,5 +118,17 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
     protected void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
+    }
+    @Override
+    public void persistUser(String uid) {
+        SharedPreferences prefs = getSharedPreferences("FoodAppPrefs", MODE_PRIVATE);
+        prefs.edit().putString("USER_UID", uid).apply();
+
+        MealsRepositoryImpl repository = new MealsRepositoryImpl(
+                MealsRemoteDataSourceImpl.getInstance(),
+                MealsLocalDataSourceImpl.getInstance(this)
+        );
+        repository.setCurrentUserId(uid);
+
     }
 }

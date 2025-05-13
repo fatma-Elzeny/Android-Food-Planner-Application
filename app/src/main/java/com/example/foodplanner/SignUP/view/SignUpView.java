@@ -6,4 +6,6 @@ public interface SignUpView {
     void showSignUpError(String message);
     void showLoading();
     void hideLoading();
+
+    void persistUser(String uid);
 }

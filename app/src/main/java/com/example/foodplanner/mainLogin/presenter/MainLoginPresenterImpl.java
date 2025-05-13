@@ -66,6 +66,7 @@ public class MainLoginPresenterImpl implements MainLoginPresenter {
             view.persistUser(user.getUid());
         }
     }
+
 }
 
 
